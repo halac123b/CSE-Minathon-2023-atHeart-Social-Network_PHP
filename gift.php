@@ -288,19 +288,11 @@ $_SESSION['callFrom'] = "index.php";
           </div> -->
 
           <?php
-                if(isset($_GET['id_post'])||$_GET['id_post']!=NULL){
-                  $post_id = $_GET['id_post'];
-                }
-                // if ($_SERVER['REQUEST_METHOD'] === 'POST'){
-                //   if (isset($_POST['id'])){
-                //     $post_id = $_POST['id'];
-                //   }
-                // }
-                $sql = "SELECT * FROM group_volunteer INNER JOIN users ON group_volunteer.id_user = users.id_user WHERE group_volunteer.id_group='$post_id' ORDER BY users.id_user DESC";
+                $sql = "SELECT * FROM gift ORDER BY gift.id DESC";
 
                 $result = $conn->query($sql);
                 if($result->num_rows == 0){
-                  echo("No one has attended yet.");
+                  echo("No promotion has been launched yet.");
                 }
                 if($result->num_rows > 0) {
                   $i = 0;
@@ -313,37 +305,19 @@ $_SESSION['callFrom'] = "index.php";
                         <div class="box-header with-border">
                           <div class="user-block">
                             <?php
-                          if($row['profileimage'] != '') {
-                            echo '<img src="uploads/profile/'.$row['profileimage'].'" class="img-circle img-bordered-sm" alt="User Image">';
+                          if($row['image'] != '') {
+                            echo '<img src="uploads/profile/'.$row['image'].'" class="img-circle img-bordered-sm" alt="User Image">';
                           } else {
                              echo '<img src="dist/img/avatar5.png" class="img-circle img-bordered-sm" alt="User Image">';
                           }
                         ?>
-                            <span class="username"><a href="#"><?php echo $row['name']; ?></a></span>
-                            <form action="" method="POST">
-                              <input type="text" name="idx" value="<?php echo($row['id_user']); ?>" hidden>
-                              <input type="submit" name="btnAccept" value="Confirm Contribute" class="btn btn-default btn-xs">
-                          </form>
-
-                          <?php
-                          if ($enable == 0 && $_SERVER['REQUEST_METHOD'] === 'POST'){
-                            if (isset($_POST['idx'])){
-                            // Something posted
-                              if (isset($_POST['btnAccept'])) {
-                              // btnDAccept
-                              $sql_point = "SELECT point FROM post WHERE post.id_post = '$post_id'";
-                              $result_point = $conn->query($sql_point);
-                              $pointRow = mysqli_fetch_assoc($result_point); // gets the first row
-                              $sql = "UPDATE users SET point = point + '$pointRow[point]' WHERE users.id_user = '$_POST[idx]'";
-                              $result1 = $conn->query($sql);
-                              $sql2 = "DELETE FROM group_volunteer WHERE group_volunteer.id_user='$_POST[idx]' AND group_volunteer.id_group='$post_id'";
-                              $result2 = $conn->query($sql2);
-                              $enable = 1;
-                              echo('<meta http-equiv="refresh" content="0.2">');
-                            }
-                            }
-                          }
-                          ?>
+                            <span class="username"><a href="#"><?php echo $row['sponsor']; ?></a></span>
+                          </div>
+                          <div>
+                            <?php echo($row["giftName"]); ?>
+                          </div>
+                          <div>
+                            <?php echo($row["requirement"]); ?>Point this month
                           </div>
                         </div>
                         <!-- /.box-footer -->

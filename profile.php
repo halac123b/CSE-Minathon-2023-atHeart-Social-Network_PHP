@@ -239,7 +239,7 @@ $_SESSION['callFrom'] = "profile.php";
               <!-- User image -->
               <li class="user-header">
 
-              <?php 
+              <?php
                 $sql = "SELECT * FROM users WHERE id_user='$_SESSION[id_user]'";
                 $result = $conn->query($sql);
                 if($result->num_rows > 0) {
@@ -312,6 +312,9 @@ $_SESSION['callFrom'] = "profile.php";
                 ?>
 
               <h3 class="profile-username text-center"><?php echo $name; ?></h3>
+              <?php if($_SESSION['role'] == "organization"){
+                              echo('<div class="text-center text-blue" style="border:solid 1px blue"><span><i class="fa fa-check"><strong>&nbsp;&nbsp;Offical</strong></i></span></div>');
+                            } ?>
 
               <p class="text-muted text-center"><?php echo $designation; ?></p>
 
@@ -458,8 +461,6 @@ $_SESSION['callFrom'] = "profile.php";
                             echo '<img class="img-responsive pad" src="uploads/post/'.$row['image'].'" alt="Photo">';
                           }
                         ?>
-                          
-
                           <p><?php echo $row['description']; ?></p>
                           <button type="button" class="btn btn-default btn-xs"><i class="fa fa-share"></i> Share</button>
                           <?php

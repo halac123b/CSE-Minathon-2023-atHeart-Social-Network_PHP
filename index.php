@@ -42,10 +42,11 @@ $_SESSION['callFrom'] = "index.php";
   <!-- AdminLTE Skins. Choose a skin from the css/skins
        folder instead of downloading all of them to reduce the load. -->
   <link rel="stylesheet" href="dist/css/skins/_all-skins.min.css">
-
+  
   <link rel="stylesheet" href="dist/css/custom.css">
 
-
+  <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/brands.min.css"> -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
   <!--[if lt IE 9]>
@@ -56,6 +57,31 @@ $_SESSION['callFrom'] = "index.php";
   <!-- Google Font -->
   <link rel="stylesheet"
         href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+
+        <style>
+  .but.active1 {
+    background: green;
+    color: white;
+  }
+  .but1.active2 {
+    background: blue;
+    color: white;
+  }
+  .but:hover {
+    background: green;
+    color: white;
+  }
+ 
+  /* .but1:active {
+    background: blue;
+    color: white;
+  } */
+  .but1:hover {
+    background: blue;
+    color: white;
+  }
+  </style>
+
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
 <div class="wrapper">
@@ -264,22 +290,130 @@ $_SESSION['callFrom'] = "index.php";
             </div>
             <!-- /.box-header -->
             <!-- form start -->
-            <form class="form-horizontal" action="addpost.php" method="post" enctype="multipart/form-data">
-              <div class="box-body">
-                <div class="form-group">
-                  <div class="col-sm-12">
-                   <textarea class="form-control" name="description" placeholder="What's on your mind?" name="message"></textarea>
-                  </div>
+            <form class="form-horizontal" action="" method="post" enctype="multipart/form-data">
+
+
+                  <label for="">Post:</label>
+                    <div>
+                        <ul class="" style="padding-left : 20px ; cursor : pointer ; font-weight : 600;">
+                            <li class="rescue" onclick="check_rescue()" id="rescue p-1">Rescue</li>
+                            <li class="healing" onclick="check_healing()" id="healing p-1">Healing</li>
+                        </ul>
+                    </div>
+                    <div class="rescue hidden">
+                        <input type="text" name="title" value="rescue" style="width: 0px; display: hidden"><br>
+                        <label for="">
+                            <i class="fa-solid fa-location-dot"></i> Location:
+                        </label>
+                        <select name="location" id="location">
+                            <option value="Quan1">Quan 1</option>
+                            <option value="Quan2">Quan 2</option>
+                            <option value="Quan3">Quan 3</option>
+                            <option value="Quan4">Quan 4</option>
+                            <option value="Quan5">Quan 5</option>
+                            <option value="Quan6">Quan 6</option>
+                            <option value="Quan7">Quan 7</option>
+                            <option value="Quan8">Quan 8</option>
+                            <option value="Quan9">Quan 9</option>
+                            <option value="Quan10">Quan 10</option>
+                            <option value="Quan11">Quan 11</option>
+                            <option value="Quan12">Quan 12</option>
+                            <option value="Quan_Binh_Thanh">Quan Binh Thanh</option>
+                            <option value="Quan_Tan_Phu">Quan Tan Phu</option>
+                            <option value="Quan_Tan_Bnh">Quan Tan Binh</option>
+                        </select><br>
+                        <label for="">Description:</label><br>
+                        <textarea name="description" id="description" cols="30" rows="5" class="border-black border-2 p-2" placeholder="What's on your mind?"></textarea><br>
+                        <!-- <div class="">
+                            <label for="">Grant Permission:</label><br>
+                            <select class="border-2 border-black" name="permission" id="permission">
+                                <option value="none">None</option>
+                                <option value="wards">Wards</option>
+                                <option value="city">City</option>
+                                <option value="central">Central</option>
+                                <option value="youth_group">Youth Group</option>
+                            </select>                  
+                        </div>                     -->
+                        <div class="">
+                            <label for="">Time Limit:</label><br>
+                            <input type="number" name="time" id="time" class="border-2 border-black w-12">
+                            minute
+                            <i class="fa-solid fa-clock p-1" style="padding: 2px"></i><br>  
+                        </div><br>
+                        <div class="">
+                            <label for="">Green Point:</label><br>
+                            <input type="number" name="green_point" id="green_point" class="border-2 border-black w-12"><i class="fa-solid fa-shield-heart p-1" style="padding : 2px"></i><br>  
+                        </div>
+                       
+                        <label for="">Sub images:</label><br>
+                        <input type="file" name="files[]" class="border-2 border-black" require multiple><br>
+                        <div class="pull-right margin-r-5">
+                          <button type="submit" name="submit_post1" class="btn btn-info">Post</button> -->
+                          <!-- <label class="btn btn-warning">Image
+                            <input type="file" name="image" id="ProfileImageBtn">
+                          </label> -->
+                        </div>
+                    </div>
+                    <div class="healing hidden">
+                    <input type="text" name="title2" value="healing" class="w-0">
+                    <label for="">
+                        <i class="fa-solid fa-location-dot"></i> Location:
+                    </label>
+                        <select name="location2" id="location2">
+                            <option value="Quan1">Quan 1</option>
+                            <option value="Quan2">Quan 2</option>
+                            <option value="Quan3">Quan 3</option>
+                            <option value="Quan4">Quan 4</option>
+                            <option value="Quan5">Quan 5</option>
+                            <option value="Quan6">Quan 6</option>
+                            <option value="Quan7">Quan 7</option>
+                            <option value="Quan8">Quan 8</option>
+                            <option value="Quan9">Quan 9</option>
+                            <option value="Quan10">Quan 10</option>
+                            <option value="Quan11">Quan 11</option>
+                            <option value="Quan12">Quan 12</option>
+                            <option value="Quan_Binh_Thanh">Quan Binh Thanh</option>
+                            <option value="Quan_Tan_Phu">Quan Tan Phu</option>
+                            <option value="Quan_Tan_Bnh">Quan Tan Binh</option>
+                        </select><br>
+                        <label for="">Description:</label><br>
+                        <textarea name="description2" id="description2" cols="30" rows="5" class="border-black border-2 p-2" placeholder="What's on your mind?"></textarea><br>
+                        <div class="">
+                            <label for="">Grant Permission:</label><br>
+                            <select class="border-2 border-black" name="permission2" id="permission2">
+                                <option value="none">None</option>
+                                <option value="wards">Wards</option>
+                                <option value="city">City</option>
+                                <option value="central">Central</option>
+                                <option value="youth_group">Youth Group</option>
+                            </select>                  
+                        </div>        
+                        <div class="">
+                            <label for="">People:</label><br>
+                            <input type="number" name="people2" id="people2" class="border-2 border-black w-12"><i class="fa-solid fa-person p-1" style="padding : 2px"></i><br>  
+                        </div><br>
+                        <div class="">
+                            <label for="">Green Point:</label><br>
+                            <input type="number" name="green_point2" id="green_point2" class="border-2 border-black w-12"><i class="fa-solid fa-shield-heart p-1" style="padding : 2px"></i><br>  
+                        </div>                    
+                        <label for="">Sub images:</label><br>
+                        <input type="file" name="files[]" class="border-2 border-black" require multiple><br>
+                        <div class="pull-right margin-r-5">
+                          <button type="submit" name="submit_post2" class="btn btn-info">Post</button> -->
+                          <!-- <label class="btn btn-warning">Image
+                            <input type="file" name="image" id="ProfileImageBtn">
+                          </label> -->
+                        </div>
+                 
                 </div>
-              </div>
               <!-- /.box-body -->
               <div class="box-footer">
                 <div class="pull-right margin-r-5">
-                  <button type="submit" class="btn btn-info">Post</button>
-                  <label class="btn btn-warning">Image
+                  <!-- <button type="submit" name="submit_post" class="btn btn-info">Post</button> -->
+                  <!-- <label class="btn btn-warning">Image
                     <input type="file" name="image" id="ProfileImageBtn">
-                  </label>
-
+                  </label> -->
+                 
                 </div>
                 <div>
                   <?php if(isset($_SESSION['uploadError'])) { ?>
@@ -289,7 +423,66 @@ $_SESSION['callFrom'] = "index.php";
               </div>
               <!-- /.box-footer -->
             </form>
+
           </div>
+          <?php
+                if($_SERVER['REQUEST_METHOD'] === 'POST'){
+                  if(isset($_POST['submit_post1'])){                  
+                    $title = $_POST['title'];
+                    $location = $_POST['location'];
+                    $description = $_POST['description'];
+                    $file_names = $_FILES['files']['name'];
+                    $file_temps = $_FILES['files']['tmp_name'];
+                    // $permission = $_POST['permission'];
+                    $timelimit = $_POST['time'];
+                    $green_point = $_POST['green_point'];
+                    $sql_add= " INSERT INTO post (id_user,title,location,description,time_limit,green_point, status) VALUES ($_SESSION[id_user],'$title','$location','$description','$timelimit','$green_point', 'pending')";
+                    $result_add_post = $conn->query($sql_add);
+                    if(isset($_FILES["files"])) {
+                      if($result_add_post){
+                        $query = "SELECT * FROM post
+                        ORDER BY id_post DESC LIMIT 1";
+                        $result =$conn->query($query)->fetch_assoc();
+                        $id_post = $result['id_post'];
+                         foreach($file_names as $key => $element){
+                          move_uploaded_file($file_temps[$key], "uploads/".$element);
+                          $query = "INSERT INTO images (id_post, image_content)
+                          VALUES ('$id_post', '$element')";
+                          $result =$conn->query($query);          
+                      }
+                    }
+                  }
+                    // echo('<meta http-equiv="refresh" content="0.5">');
+                  }
+                  if(isset($_POST['submit_post2'])){
+                    $title = $_POST['title2'];
+                    $location = $_POST['location2'];
+                    $description = $_POST['description2'];
+                    $permission = $_POST['permission2'];
+                    $people = $_POST['people2'];
+                    $file_names = $_FILES['files']['name'];
+                    $file_temps = $_FILES['files']['tmp_name'];
+                    $green_point = $_POST['green_point2'];
+                    $sql_add= " INSERT INTO post (id_user,title,location,description,permission,people,green_point ) VALUES ($_SESSION[id_user],'$title','$location','$description','$permission','$people','$green_point')";
+                    $result_add_post = $conn->query($sql_add);
+                    if(isset($_FILES["files"])) {
+                      if($result_add_post){
+                        $query = "SELECT * FROM post
+                        ORDER BY id_post DESC LIMIT 1";
+                        $result =$conn->query($query)->fetch_assoc();
+                        $id_post = $result['id_post'];
+                         foreach($file_names as $key => $element){
+                          move_uploaded_file($file_temps[$key], "uploads/".$element);
+                          $query = "INSERT INTO images (id_post, image_content)
+                          VALUES ('$id_post', '$element')";
+                          $result =$conn->query($query);
+                      }
+                    }
+                  }
+                    // echo('<meta http-equiv="refresh" content="0.5">');
+                  }
+              }
+              ?>
 
           <?php
 
@@ -313,7 +506,7 @@ $_SESSION['callFrom'] = "index.php";
                              echo '<img src="dist/img/avatar5.png" class="img-circle img-bordered-sm" alt="User Image">';
                           }
                         ?>
-                            <span class="username"><a href="#"><?php echo $row['name']; ?></a></span>
+                            <span class="username"><a href="#"><?php echo $row['name'] . "   " . "('$row[point]')"; ?></a></span>
                             <span class="description">Shared publicly - <?php echo date('d-M-Y h:i a', strtotime($row['createdAt'])); ?></span>
                           </div>
                         </div>
@@ -325,6 +518,13 @@ $_SESSION['callFrom'] = "index.php";
                         ?>
                           
 
+                          <div style="font-size: 20px;font-weight : 600; width: 100px;display: flex; padding:8px">
+                              <div style="display:flex;background-color:green ; padding : 2px ; color:aliceblue;border-radius:5px ;font-size:smaller ; align-items: center;">Topic</div>
+                              <div style="padding: 4px">
+                                <?php echo $row['title']; ?>
+                              </div>
+                          </div>
+                          <p style="font-size: 18px;"><i class="fa-solid fa-location-dot" style="padding-right:2px"></i> <?php echo $row['location'];?></p>
                           <p><?php echo $row['description']; ?></p>
                           <button type="button" class="btn btn-default btn-xs"><i class="fa fa-share"></i> Share</button>
                           <?php
@@ -432,137 +632,60 @@ $_SESSION['callFrom'] = "index.php";
 
         <div class="col-md-4">
           <!-- USERS LIST -->
-          <div class="box box-danger">
+          <div class="box box-success">
             <div class="box-header with-border">
-              <h3 class="box-title">Filter</h3>
-
-              <div class="box-tools pull-right">
-                <span class="label label-success">10 Online</span>
-              </div>
+              <h3 class="box-title">Location Filter</h3>
             </div>
-            <!-- /.box-header -->
-            <div class="box-body no-padding">
-              <ul class="users-list clearfix">
-                <li>
-                  <img src="dist/img/user1-128x128.jpg" alt="User Image">
-                  <a class="users-list-name" href="#">Alexander Pierce</a>
-                  <span class="users-list-date">Today</span>
-                </li>
-                <li>
-                  <img src="dist/img/user8-128x128.jpg" alt="User Image">
-                  <a class="users-list-name" href="#">Norman</a>
-                  <span class="users-list-date">Yesterday</span>
-                </li>
-                <li>
-                  <img src="dist/img/user7-128x128.jpg" alt="User Image">
-                  <a class="users-list-name" href="#">Jane</a>
-                  <span class="users-list-date">12 Jan</span>
-                </li>
-                <li>
-                  <img src="dist/img/user6-128x128.jpg" alt="User Image">
-                  <a class="users-list-name" href="#">John</a>
-                  <span class="users-list-date">12 Jan</span>
-                </li>
-                <li>
-                  <img src="dist/img/user2-160x160.jpg" alt="User Image">
-                  <a class="users-list-name" href="#">Alexander</a>
-                  <span class="users-list-date">13 Jan</span>
-                </li>
-                <li>
-                  <img src="dist/img/user5-128x128.jpg" alt="User Image">
-                  <a class="users-list-name" href="#">Sarah</a>
-                  <span class="users-list-date">14 Jan</span>
-                </li>
-                <li>
-                  <img src="dist/img/user4-128x128.jpg" alt="User Image">
-                  <a class="users-list-name" href="#">Nora</a>
-                  <span class="users-list-date">15 Jan</span>
-                </li>
-                <li>
-                  <img src="dist/img/user3-128x128.jpg" alt="User Image">
-                  <a class="users-list-name" href="#">Nadia</a>
-                  <span class="users-list-date">15 Jan</span>
-                </li>
-              </ul>
-              <!-- /.users-list -->
+            <div class="box-body" id="myBtnContainer">
+              <button type="button" class="btn btn-outline-success but active1">
+                All
+              </button>
+              <button type="button" class="btn btn-outline-success but">
+                1 st District
+              </button>
+              <button type="button" class="btn btn-outline-success but">
+                2 st District
+              </button>
+              <button type="button" class="btn btn-outline-success but">
+                3 st District
+              </button>
+              <button type="button" class="btn btn-outline-success but">
+                4 st District
+              </button>
+              <button type="button" class="btn btn-outline-success but">
+                Thu Duc District
+              </button>
+              <button type="button" class="btn btn-outline-success but">
+                Binh Thanh District
+              </button>
             </div>
-            <!-- /.box-body -->
-            <div class="box-footer text-center">
-              <a href="javascript:void(0)" class="uppercase">View All Users</a>
-            </div>
-            <!-- /.box-footer -->
           </div>
+
           <!--/.box -->
 
           <!-- PRODUCT LIST -->
           <div class="box box-primary">
             <div class="box-header with-border">
-              <h3 class="box-title">Suggested Pages</h3>
-
+              <h3 class="box-title">Category filter</h3>
             </div>
             <!-- /.box-header -->
-            <div class="box-body">
-              <ul class="products-list product-list-in-box">
-                <li class="item">
-                  <div class="product-img">
-                    <img src="dist/img/default-50x50.gif" alt="Product Image">
-                  </div>
-                  <div class="product-info">
-                    <a href="javascript:void(0)" class="product-title">Samsung TV
-                      <span class="label label-warning pull-right">25,000 Likes</span></a>
-                    <span class="product-description">
-                          Samsung 32" 1080p 60Hz LED Smart HDTV.
-                        </span>
-                  </div>
-                </li>
-                <!-- /.item -->
-                <li class="item">
-                  <div class="product-img">
-                    <img src="dist/img/default-50x50.gif" alt="Product Image">
-                  </div>
-                  <div class="product-info">
-                    <a href="javascript:void(0)" class="product-title">Bicycle
-                      <span class="label label-info pull-right">1500 Likes</span></a>
-                    <span class="product-description">
-                          26" Mongoose Dolomite Men's 7-speed, Navy Blue.
-                        </span>
-                  </div>
-                </li>
-                <!-- /.item -->
-                <li class="item">
-                  <div class="product-img">
-                    <img src="dist/img/default-50x50.gif" alt="Product Image">
-                  </div>
-                  <div class="product-info">
-                    <a href="javascript:void(0)" class="product-title">Xbox One <span
-                        class="label label-danger pull-right">500 Likes</span></a>
-                    <span class="product-description">
-                          Xbox One Console Bundle with Halo Master Chief Collection.
-                        </span>
-                  </div>
-                </li>
-                <!-- /.item -->
-                <li class="item">
-                  <div class="product-img">
-                    <img src="dist/img/default-50x50.gif" alt="Product Image">
-                  </div>
-                  <div class="product-info">
-                    <a href="javascript:void(0)" class="product-title">PlayStation 4
-                      <span class="label label-success pull-right">24,000 Likes</span></a>
-                    <span class="product-description">
-                          PlayStation 4 500GB Console (PS4)
-                        </span>
-                  </div>
-                </li>
-                <!-- /.item -->
-              </ul>
+            <div class="box-body" id="myBtnContainer1">
+              <button type="button" class="btn btn-outline-primary but1 active2">
+                All
+              </button>
+              <button type="button1" class="btn btn-outline-primary but1">
+                Environment
+              </button>
+              <button type="button1" class="btn btn-outline-primary but1">
+                Creature
+              </button>
+              <button type="button1" class="btn btn-outline-primary but1">
+                People
+              </button>
             </div>
-            <!-- /.box-body -->
-            <div class="box-footer text-center">
-              <a href="javascript:void(0)" class="uppercase">View All Pages</a>
-            </div>
-            <!-- /.box-footer -->
+            <!-- /.box-body -->          
           </div>
+
           <!-- /.box -->
 
 
@@ -626,11 +749,45 @@ $_SESSION['callFrom'] = "index.php";
     }
   }
 </script>
-
 <script>
+  var btnContainer1 = document.getElementById("myBtnContainer1");
+  var btns1 = btnContainer1.getElementsByClassName("but1");
+  console.log(btns1.length);
+  for (var i = 0; i < btns1.length; i++) {
+    btns1[i].addEventListener("click", function(){
+      var current = document.getElementsByClassName("active2");
+      console.log(current[0]);
+      current[0].classList.remove('active2');
+      this.classList.add("active2");
+    });
+  }
+</script>
+<script>
+  var btnContainer = document.getElementById("myBtnContainer");
+  var btns = btnContainer.getElementsByClassName("but");
+  for (var i = 0; i < btns.length; i++) {
+    btns[i].addEventListener("click", function(){
+      var current = document.getElementsByClassName("active1");
+      console.log(current[0]);
+      current[0].classList.remove('active1');
+      this.classList.add("active1");
+    });
+  }
+
   function toggleComments(id) {
     $("#boxComment"+id).slideToggle("slow");
   }
 </script>
+<script>
+        function check_rescue(){
+            $('.healing').addClass('hidden');
+            $('.rescue').removeClass('hidden');
+        }
+        function check_healing(){      
+            $('.healing').removeClass('hidden');
+            $('.rescue').addClass('hidden');
+        }
+    </script>
+
 </body>
 </html>

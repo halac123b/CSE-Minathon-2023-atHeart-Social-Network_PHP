@@ -1,3 +1,4 @@
+
 <?php
 
 session_start();
@@ -19,8 +20,11 @@ if($result->num_rows > 0) {
     $name = $row['name'];
   }
 }
+
 $_SESSION['callFrom'] = "index.php";
+
 ?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -59,7 +63,7 @@ $_SESSION['callFrom'] = "index.php";
   <header class="main-header">
 
     <!-- Logo -->
-    <a href="index2.html" class="logo">
+    <a href="index.php" class="logo">
       <!-- mini logo for sidebar mini 50x50 pixels -->
       <span class="logo-mini"><b>S</b>N</span>
       <!-- logo for regular state and mobile devices -->
@@ -197,7 +201,7 @@ $_SESSION['callFrom'] = "index.php";
           <!-- User Account: style can be found in dropdown.less -->
           <li class="dropdown user user-menu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-              <?php
+              <?php 
                 $sql = "SELECT * FROM users WHERE id_user='$_SESSION[id_user]'";
                 $result = $conn->query($sql);
                 if($result->num_rows > 0) {
@@ -238,7 +242,7 @@ $_SESSION['callFrom'] = "index.php";
   </header>
   <!-- Left side column. contains the logo and sidebar -->
   <?php
-  require_once("main-sidebar.php");
+    require_once("main-sidebar.php");
   ?>
 
   <!-- Content Wrapper. Contains page content -->
@@ -246,7 +250,7 @@ $_SESSION['callFrom'] = "index.php";
 
     <section class="content-header">
       <h1>
-        My Activities
+        News Feed
       </h1>
     </section>
     <!-- Main content -->
@@ -254,24 +258,24 @@ $_SESSION['callFrom'] = "index.php";
       <!-- Info boxes -->
       <div class="row">
         <div class="col-md-8 col-sm-6 col-xs-12">
-          <!-- <div class="box box-info">
+          <div class="box box-info">
             <div class="box-header with-border">
               <h3 class="box-title">Wall</h3>
-            </div> -->
+            </div>
             <!-- /.box-header -->
             <!-- form start -->
-            <!-- <form class="form-horizontal" action="addpost.php" method="post" enctype="multipart/form-data">
+            <form class="form-horizontal" action="addpost.php" method="post" enctype="multipart/form-data">
               <div class="box-body">
                 <div class="form-group">
                   <div class="col-sm-12">
                    <textarea class="form-control" name="description" placeholder="What's on your mind?" name="message"></textarea>
                   </div>
                 </div>
-              </div> -->
+              </div>
               <!-- /.box-body -->
-              <!-- <div class="box-footer">
+              <div class="box-footer">
                 <div class="pull-right margin-r-5">
-                  <button type="submit" class="btn btn-info">Post</button>
+                  <button type="submit" class="btn btn-info">Raise Fund</button>
                   <label class="btn btn-warning">Image
                     <input type="file" name="image" id="ProfileImageBtn">
                   </label>
@@ -282,29 +286,18 @@ $_SESSION['callFrom'] = "index.php";
                     <p><?php echo $_SESSION['uploadError']; ?></p>
                   <?php unset($_SESSION['uploadError']); } ?>
                 </div>
-              </div> -->
+              </div>
               <!-- /.box-footer -->
-            <!-- </form>
-          </div> -->
+            </form>
+          </div>
 
           <?php
-                if(isset($_GET['id_post'])||$_GET['id_post']!=NULL){
-                  $post_id = $_GET['id_post'];
-                }
-                // if ($_SERVER['REQUEST_METHOD'] === 'POST'){
-                //   if (isset($_POST['id'])){
-                //     $post_id = $_POST['id'];
-                //   }
-                // }
-                $sql = "SELECT * FROM group_volunteer INNER JOIN users ON group_volunteer.id_user = users.id_user WHERE group_volunteer.id_group='$post_id' ORDER BY users.id_user DESC";
-
+                $sql = "SELECT * FROM fund INNER JOIN users WHERE fund.id_user=users.id_user AND fund.id_user='$_SESSION[id_user]' AND fund.status='air' ORDER BY fund.id_post DESC";
                 $result = $conn->query($sql);
-                if($result->num_rows == 0){
-                  echo("No one has attended yet.");
-                }
                 if($result->num_rows > 0) {
                   $i = 0;
                   $enable = 0;
+                  $num = 0;
                   while($row =  $result->fetch_assoc()) {
                     $i++;
                     ?>
@@ -319,37 +312,137 @@ $_SESSION['callFrom'] = "index.php";
                              echo '<img src="dist/img/avatar5.png" class="img-circle img-bordered-sm" alt="User Image">';
                           }
                         ?>
-                            <span class="username"><a href="#"><?php echo $row['name']; ?></a></span>
-                            <form action="" method="POST">
-                              <input type="text" name="idx" value="<?php echo($row['id_user']); ?>" hidden>
-                              <input type="submit" name="btnAccept" value="Confirm Contribute" class="btn btn-default btn-xs">
-                          </form>
+                            <span class="username"><a href="#"><?php echo $row['name'] . "   " . "($row[point])"; ?></a></span>
+                            <span class="description">Shared publicly - <?php echo date('d-M-Y h:i a', strtotime($row['createdAt'])); ?></span>
+                          </div>
+                        </div>
+                        <div class="box-body">
+                        <?php
+                          if($row['image'] != "") {
+                            echo '<img class="img-responsive pad" src="uploads/post/'.$row['image'].'" alt="Photo">';
+                          }
+                        ?>
 
+                          <p><?php echo $row['description']; ?></p>
+                          <p>Target: <?php echo $row['target']; ?>VNĐ</p>
+                          <p><strong>Plan:</strong> We promise to use your money to do the good thing as first you want it to be:<br> <?php echo $row['plan']; ?></p>
+                          <label for="file">Funding progress:</label><br>
+                          <progress style="background-color: green; width:80vh; border-radius:50px;" id="file" value="<?php echo("$row[current]");?>" max="<?php echo("$row[target]");?>"> <?php echo("$row[current] / $row[target]");?>% </progress> <br>
+                          <button type="button" class="btn btn-default btn-xs" onclick="showDialog(<?php echo($num);?>)"><i class="fa fa-money"></i>&nbsp;&nbsp;Donate</button>
+                          <form action="" method="POST" id="donateBtn<?php echo($num);?>" style="display:none;">
+                            <input type="text" name="money">
+                            <input type="submit" name="btnAccept" value="Accept" class="btn btn-default btn-xs">
+                          </form>
+                          <script>
+                            function showDialog(num){
+                              if (document.getElementById('donateBtn' + num).style.display == 'none'){
+                                document.getElementById('donateBtn' + num).style.display = 'block';
+                              }
+                              else {
+                                document.getElementById('donateBtn' + num).style.display = 'none';
+                              }
+                            }
+                          </script>
                           <?php
                           if ($enable == 0 && $_SERVER['REQUEST_METHOD'] === 'POST'){
-                            if (isset($_POST['idx'])){
                             // Something posted
-                              if (isset($_POST['btnAccept'])) {
-                              // btnDAccept
-                              $sql_point = "SELECT point FROM post WHERE post.id_post = '$post_id'";
-                              $result_point = $conn->query($sql_point);
-                              $pointRow = mysqli_fetch_assoc($result_point); // gets the first row
-                              $sql = "UPDATE users SET point = point + '$pointRow[point]' WHERE users.id_user = '$_POST[idx]'";
-                              $result1 = $conn->query($sql);
-                              $sql2 = "DELETE FROM group_volunteer WHERE group_volunteer.id_user='$_POST[idx]' AND group_volunteer.id_group='$post_id'";
-                              $result2 = $conn->query($sql2);
+                            if (isset($_POST['btnAccept'])) {
+                              $sql1 = "UPDATE fund SET current = current + '$_POST[money]' WHERE fund.id_post = '$row[id_post]'";
+                              $result1 = $conn->query($sql1);
+                              $star = intval($_POST['money'] / 10000);
+                              $sql1 = "UPDATE users SET point = point + '$_POST[money]' / 10000 WHERE users.id_user = '$_SESSION[id_user]'";
+                              $result1 = $conn->query($sql1);
+                              echo("<script>alert('Thank you very much for your contribution, you gain $star". " Point for our gratefulness <3');</script>");
                               $enable = 1;
-                              echo('<meta http-equiv="refresh" content="0.2">');
-                            }
+                              // echo("<script>
+                              //   alert('Thank you very much for your contribution, you gain for our gratefulness <3');</script>");
                             }
                           }
                           ?>
+                          <form action="" method="POST">
+                            <button type="submit" name="form_submit" style="cursor : pointer"><i class="fa-solid fa-handshake-angle"></i>Attend</button> 
+                          </form>
+                          <?php
+                          if($enable == 0 && $_SERVER['REQUEST_METHOD'] === 'POST'){
+                            if(isset($_POST['form_submit']))
+                            {
+                              $sql_add= " INSERT INTO group_volunteer (id_group ,id_user, name , active) VALUES ($row[id_post],$_SESSION[id_user],'group $row[id_post]' ,'1')";
+                              $result_add = $conn->query($sql_add);
+                              $enable = 1;
+                              echo('<meta http-equiv="refresh" content="0.5">');
+                            }
+                          }
+                          ?>
+                          <?php
+                          $sql2 = "SELECT * FROM fund WHERE id_post='$row[id_post]'";
+                           //from likes
+                          $result2 = $conn->query($sql2);
+                          $totalLikes = (int)$result2->num_rows;
+                          ?>
+                          <?php
+                          $sql3 = "SELECT * FROM fund WHERE id_post='$row[id_post]'";
+                           //from comments
+                          $result3 = $conn->query($sql3);
+                          $totalComments = (int)$result3->num_rows;
+                          ?>
+                          <span class="pull-right text-muted commentBtn" onclick="toggleComments(<?php echo $i; ?>);"><?php echo $totalLikes; ?> likes - <?php echo $totalComments; ?> comments</span>
+                        </div>
+                        <!-- /.box-body -->
+                        <div id="boxComment<?php echo $i; ?>" class="box-footer box-comments">
+                        <?php
+                          $sql4 = "SELECT * FROM fund WHERE id_user='$_SESSION[id_user]' AND id_post='$row[id_post]'";
+                          //from comments
+                          $result4 = $conn->query($sql4);
+
+                          if($result4->num_rows > 0) {
+                            while($row4 = $result4->fetch_assoc()) {
+                              $sql5 = "SELECT * FROM users WHERE id_user='$row4[id_user]'";
+                              $result5 = $conn->query($sql5);
+                              if($result5->num_rows > 0) {
+                                $row5 = $result5->fetch_assoc();
+                              }
+                          ?>
+
+                          <div class="box-comment">
+                          <?php
+                              if($row5['profileimage'] != "") {
+                                echo '<img class="img-circle img-sm" src="uploads/profile/'.$row5['profileimage'].'" alt="Photo">';
+                              }
+                            ?>
+                            <div class="comment-text">
+                                  <span class="username">
+                                    <?php echo $row5['name']; ?>
+                                    <span class="text-muted pull-right"><?php echo date('d-M-Y h:i a', strtotime($row4['createdAt'])); ?></span>
+                                  </span>
+                              <?php echo $row4['comment']; ?>
+                            </div>
                           </div>
+
+                          <?php
+                          }
+                        }
+                        ?>
+
+                        </div>
+                        <!-- /.box-footer -->
+                        <div class="box-footer">
+                          <form action="#" method="post">
+                          <?php
+                              if($row['profileimage'] != "") {
+                                echo '<img class="img-responsive img-circle img-sm" src="uploads/profile/'.$row['profileimage'].'" alt="Photo">';
+                              }
+                            ?>
+                            <!-- .img-push is used to add margin to elements next to floating images -->
+                            <div class="img-push">
+                              <input type="text" id="addcomment" data-id="<?php echo $row['id_post']; ?>" class="form-control input-sm" onkeypress="checkInput(event);" placeholder="Press enter to post comment">
+                            </div>
+                          </form>
                         </div>
                         <!-- /.box-footer -->
                       </div>
                       <!-- /.box -->
                     <?php
+                    $num += 1;
                   }
                 }
                 ?>
@@ -359,7 +452,7 @@ $_SESSION['callFrom'] = "index.php";
           <!-- USERS LIST -->
           <div class="box box-danger">
             <div class="box-header with-border">
-              <h3 class="box-title">My Friends</h3>
+              <h3 class="box-title">Filter</h3>
 
               <div class="box-tools pull-right">
                 <span class="label label-success">10 Online</span>

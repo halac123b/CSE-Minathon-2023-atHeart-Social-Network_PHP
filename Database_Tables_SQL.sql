@@ -79,6 +79,13 @@ CREATE TABLE `users` (
 INSERT INTO `users` (`id_user`, `name`, `email`, `password`, `createdAt`, `designation`, `degree`, `university`, `city`, `country`, `skills`, `aboutme`, `profileimage`) VALUES
 (13, 'John Smith', 'test@test.com', 'YjdlNDhmMTk4NjFhNDNjNGM2MDdhOGFlZTBiY2M3Mjg=', '2017-09-04 07:45:47', 'Web Developer', 'B.Tech', 'ABCB', 'Sydney', 'Australia', 'PHP HTML CSS', 'I like to code and teach.', '59ad28c885f9c.png', `normal`);
 
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `users`
+--
+
+
 --
 -- Indexes for dumped tables
 --

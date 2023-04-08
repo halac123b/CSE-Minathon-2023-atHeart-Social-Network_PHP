@@ -288,19 +288,10 @@ $_SESSION['callFrom'] = "index.php";
           </div> -->
 
           <?php
-                if(isset($_GET['id_post'])||$_GET['id_post']!=NULL){
-                  $post_id = $_GET['id_post'];
-                }
-                // if ($_SERVER['REQUEST_METHOD'] === 'POST'){
-                //   if (isset($_POST['id'])){
-                //     $post_id = $_POST['id'];
-                //   }
-                // }
-                $sql = "SELECT * FROM group_volunteer INNER JOIN users ON group_volunteer.id_user = users.id_user WHERE group_volunteer.id_group='$post_id' ORDER BY users.id_user DESC";
-
+                $sql = "SELECT * FROM fund INNER JOIN users ON fund.id_user = users.id_user WHERE fund.status='air' AND fund.id_user='$_SESSION[id_user]' ORDER BY fund.id_post ASC";
                 $result = $conn->query($sql);
                 if($result->num_rows == 0){
-                  echo("No one has attended yet.");
+                  echo("You have no crowfund activity yet.");
                 }
                 if($result->num_rows > 0) {
                   $i = 0;
@@ -320,31 +311,97 @@ $_SESSION['callFrom'] = "index.php";
                           }
                         ?>
                             <span class="username"><a href="#"><?php echo $row['name']; ?></a></span>
-                            <form action="" method="POST">
-                              <input type="text" name="idx" value="<?php echo($row['id_user']); ?>" hidden>
-                              <input type="submit" name="btnAccept" value="Confirm Contribute" class="btn btn-default btn-xs">
+                            <span class="description">Shared publicly - <?php echo date('d-M-Y h:i a', strtotime($row['createdAt'])); ?></span>
+                          </div>
+                        </div>
+                        <div class="box-body">
+                        <?php
+                          if($row['image'] != "") {
+                            echo '<img class="img-responsive pad" src="uploads/post/'.$row['image'].'" alt="Photo">';
+                          }
+                        ?>
+
+                          <p><?php echo $row['description']; ?></p>
+                          <a href="actionDetail.php?id_post=<?php echo $row['id_post']?>"><button>Checkout</button></a>
+                          <!-- <form action="actionDetail.php" method="POST">
+                            <input type="text" name="id" value="<?php echo($row['id_post']); ?>" hidden>
+                            <input type="submit" name="btnAccept" value="Checkout" class="btn btn-default btn-xs">
+
                           </form>
+                          //<?php
+                          //if ($enable == 0 && $_SERVER['REQUEST_METHOD'] === 'POST'){
+                            // Something posted
+                            //if (isset($_POST['btnAccept'])) {
+                              // btnDAccept
+                              //$enable = 1;
+                              //include('actionDetail.php');
+                            //}
+                          //}
+                          ?> -->
+                          <?php
+                          $sql2 = "SELECT * FROM fund WHERE id_post='$row[id_post]'";
+                           //from likes
+                          $result2 = $conn->query($sql2);
+                          $totalLikes = (int)$result2->num_rows;
+                          ?>
+                          <?php
+                          $sql3 = "SELECT * FROM fund WHERE id_post='$row[id_post]'";
+                           //from comments
+                          $result3 = $conn->query($sql3);
+                          $totalComments = (int)$result3->num_rows;
+                          ?>
+                          <span class="pull-right text-muted commentBtn" onclick="toggleComments(<?php echo $i; ?>);"><?php echo $totalLikes; ?> likes - <?php echo $totalComments; ?> comments</span>
+                        </div>
+                        <!-- /.box-body -->
+                        <div id="boxComment<?php echo $i; ?>" class="box-footer box-comments">
+                        <?php
+                          $sql4 = "SELECT * FROM fund WHERE id_user='$_SESSION[id_user]' AND id_post='$row[id_post]'";
+                          //from comments
+                          $result4 = $conn->query($sql4);
+
+                          if($result4->num_rows > 0) {
+                            while($row4 = $result4->fetch_assoc()) {
+                              $sql5 = "SELECT * FROM users WHERE id_user='$row4[id_user]'";
+                              $result5 = $conn->query($sql5);
+                              if($result5->num_rows > 0) {
+                                $row5 = $result5->fetch_assoc();
+                              }
+                          ?>
+
+                          <div class="box-comment">
+                          <?php
+                              if($row5['profileimage'] != "") {
+                                echo '<img class="img-circle img-sm" src="uploads/profile/'.$row5['profileimage'].'" alt="Photo">';
+                              }
+                            ?>
+                            <div class="comment-text">
+                                  <span class="username">
+                                    <?php echo $row5['name']; ?>
+                                    <span class="text-muted pull-right"><?php echo date('d-M-Y h:i a', strtotime($row4['createdAt'])); ?></span>
+                                  </span>
+                              <?php echo $row4['comment']; ?>
+                            </div>
+                          </div>
 
                           <?php
-                          if ($enable == 0 && $_SERVER['REQUEST_METHOD'] === 'POST'){
-                            if (isset($_POST['idx'])){
-                            // Something posted
-                              if (isset($_POST['btnAccept'])) {
-                              // btnDAccept
-                              $sql_point = "SELECT point FROM post WHERE post.id_post = '$post_id'";
-                              $result_point = $conn->query($sql_point);
-                              $pointRow = mysqli_fetch_assoc($result_point); // gets the first row
-                              $sql = "UPDATE users SET point = point + '$pointRow[point]' WHERE users.id_user = '$_POST[idx]'";
-                              $result1 = $conn->query($sql);
-                              $sql2 = "DELETE FROM group_volunteer WHERE group_volunteer.id_user='$_POST[idx]' AND group_volunteer.id_group='$post_id'";
-                              $result2 = $conn->query($sql2);
-                              $enable = 1;
-                              echo('<meta http-equiv="refresh" content="0.2">');
-                            }
-                            }
                           }
-                          ?>
-                          </div>
+                        }
+                        ?>
+
+                        </div>
+                        <!-- /.box-footer -->
+                        <div class="box-footer">
+                          <form action="#" method="post">
+                          <?php
+                              if($row['profileimage'] != "") {
+                                echo '<img class="img-responsive img-circle img-sm" src="uploads/profile/'.$row['profileimage'].'" alt="Photo">';
+                              }
+                            ?>
+                            <!-- .img-push is used to add margin to elements next to floating images -->
+                            <div class="img-push">
+                              <input type="text" id="addcomment" data-id="<?php echo $row['id_post']; ?>" class="form-control input-sm" onkeypress="checkInput(event);" placeholder="Press enter to post comment">
+                            </div>
+                          </form>
                         </div>
                         <!-- /.box-footer -->
                       </div>

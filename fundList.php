@@ -264,31 +264,42 @@ $_SESSION['callFrom'] = "index.php";
             </div>
             <!-- /.box-header -->
             <!-- form start -->
-            <form class="form-horizontal" action="addpost.php" method="post" enctype="multipart/form-data">
-              <div class="box-body">
-                <div class="form-group">
-                  <div class="col-sm-12">
-                   <textarea class="form-control" name="description" placeholder="What's on your mind?" name="message"></textarea>
-                  </div>
+            <button onclick="checkStart()">Send a crowfund program</button>
+            <div class="fundForm hidden">
+                    <input type="text" name="title2" value="fundForm" class="w-0" hidden>
+                    <label for="">
+                        <i class="fa-solid fa-location-dot"></i> Location:
+                    </label>
+                        <label for="">Description:</label><br>
+                        <textarea name="description2" id="description2" cols="30" rows="5" class="border-black border-2 p-2" placeholder="What's on your mind?"></textarea><br>
+                        <div class="">
+                            <label for="">Grant Permission:</label><br>
+                            <select class="border-2 border-black" name="permission2" id="permission2">
+                                <option value="none">None</option>
+                                <option value="wards">Wards</option>
+                                <option value="city">City</option>
+                                <option value="central">Central</option>
+                                <option value="youth_group">Youth Group</option>
+                            </select>                  
+                        </div>        
+                        <div class="">
+                            <label for="">People:</label><br>
+                            <input type="number" name="people2" id="people2" class="border-2 border-black w-12"><i class="fa-solid fa-person p-1" style="padding : 2px"></i><br>  
+                        </div><br>
+                        <div class="">
+                            <label for="">Green Point:</label><br>
+                            <input type="number" name="green_point2" id="green_point2" class="border-2 border-black w-12"><i class="fa-solid fa-shield-heart p-1" style="padding : 2px"></i><br>  
+                        </div>                    
+                        <label for="">Sub images:</label><br>
+                        <input type="file" name="files[]" class="border-2 border-black" require multiple><br>
+                        <div class="pull-right margin-r-5">
+                          <button type="submit" name="submit_post2" class="btn btn-info">Post</button> -->
+                          <!-- <label class="btn btn-warning">Image
+                            <input type="file" name="image" id="ProfileImageBtn">
+                          </label> -->
+                        </div>
+                 
                 </div>
-              </div>
-              <!-- /.box-body -->
-              <div class="box-footer">
-                <div class="pull-right margin-r-5">
-                  <button type="submit" class="btn btn-info">Raise Fund</button>
-                  <label class="btn btn-warning">Image
-                    <input type="file" name="image" id="ProfileImageBtn">
-                  </label>
-
-                </div>
-                <div>
-                  <?php if(isset($_SESSION['uploadError'])) { ?>
-                    <p><?php echo $_SESSION['uploadError']; ?></p>
-                  <?php unset($_SESSION['uploadError']); } ?>
-                </div>
-              </div>
-              <!-- /.box-footer -->
-            </form>
           </div>
 
           <?php
@@ -366,7 +377,7 @@ $_SESSION['callFrom'] = "index.php";
                           if($enable == 0 && $_SERVER['REQUEST_METHOD'] === 'POST'){
                             if(isset($_POST['form_submit']))
                             {
-                              $sql_add= " INSERT INTO group_volunteer (id_group ,id_user, name , active) VALUES ($row[id_post],$_SESSION[id_user],'group $row[id_post]' ,'1')";
+                              $sql_add= " INSERT INTO group_volunteer (id_group ,id_user, name , active, status) VALUES ($row[id_post],$_SESSION[id_user],'group $row[id_post]' ,'1', 'pending')";
                               $result_add = $conn->query($sql_add);
                               $enable = 1;
                               echo('<meta http-equiv="refresh" content="0.5">');
@@ -650,5 +661,10 @@ $_SESSION['callFrom'] = "index.php";
     $("#boxComment"+id).slideToggle("slow");
   }
 </script>
+<script>
+        function checkStart(){
+            $('.fundForm').removeClass('hidden');
+        }
+    </script>
 </body>
 </html>

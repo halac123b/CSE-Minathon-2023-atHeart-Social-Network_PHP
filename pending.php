@@ -318,7 +318,7 @@ $_SESSION['callFrom'] = "index.php";
                         <div class="box-body">
                         <?php
                           if($row['image'] != "") {
-                            echo '<img class="img-responsive pad" src="uploads/post/'.$row['image'].'" alt="Photo">';
+                            echo '<img class="img-responsive pad" src="uploads/'.$row['image'].'" alt="Photo">';
                           }
                         ?>
                           <div style="font-size: 20px;font-weight : 600; width: 100px;display: flex; padding:8px">
@@ -338,8 +338,8 @@ $_SESSION['callFrom'] = "index.php";
                               grid-column-gap: 1px;
                               grid-row-gap: 1px;">');
                               while($img =  $result->fetch_assoc()){
-                                if ($img['image_content'] != 0){
-                                  echo('<img class="img-responsive pad" src="uploads/post/' . $img['image_content']. '" alt="Photo" style="display:flex">');
+                                if ($img['image_content'] != ""){
+                                  echo('<img class="img-responsive pad" src="uploads/' . $img['image_content']. '" alt="Photo" style="display:flex">');
                                 }
                               }
                               echo("</div>");
@@ -361,17 +361,19 @@ $_SESSION['callFrom'] = "index.php";
                           }
                           ?>
                           <form action="" method="POST">
-                            <button type="submit" name="form_submit" style="cursor : pointer"><i class="fa-solid fa-handshake-angle"></i>Attend</button> 
+                          <input type="text" name="id" value="<?php echo($row['id_post']); ?>" hidden>
+                            <button type="submit" name="form_submit" style="cursor : pointer"><i class="fa-solid fa-handshake-angle"></i>Accept</button> 
                           </form>
                           <?php
-                          if($enable == 0 && $_SERVER['REQUEST_METHOD'] === 'POST'){
-                            if(isset($_POST['form_submit']))
-                            {
-                              $sql_add= " INSERT INTO group_volunteer (id_group ,id_user, name , active) VALUES ($row[id_post],$_SESSION[id_user],'group $row[id_post]' ,'1')";
-                              $result_add = $conn->query($sql_add);
+                          if ($enable == 0 && $_SERVER['REQUEST_METHOD'] === 'POST'){
+                            // Something posted
+                            if (isset($_POST['form_submit'])){
+                              // btnDAccept
+                              $sql = "UPDATE post SET status = 'air' WHERE post.id_post = '$_POST[id]'";
+                              $result1 = $conn->query($sql);
                               $enable = 1;
                               echo('<meta http-equiv="refresh" content="0.5">');
-                            }
+                            } 
                           }
                           ?>
                           <?php

@@ -332,7 +332,7 @@ $_SESSION['callFrom'] = "index.php";
                                 <option value="city">City</option>
                                 <option value="central">Central</option>
                                 <option value="youth_group">Youth Group</option>
-                            </select>                  
+                            </select>
                         </div>                     -->
                         <div class="">
                             <label for="">Time Limit:</label><br>
@@ -513,7 +513,7 @@ $_SESSION['callFrom'] = "index.php";
                         <div class="box-body">
                         <?php
                           if($row['image'] != "") {
-                            echo '<img class="img-responsive pad" src="uploads/post/'.$row['image'].'" alt="Photo">';
+                            echo '<img class="img-responsive pad" src="uploads/'.$row['image'].'" alt="Photo">';
                           }
                         ?>
                           <div style="font-size: 20px;font-weight : 600; width: 100px;display: flex; padding:8px">
@@ -533,8 +533,8 @@ $_SESSION['callFrom'] = "index.php";
                               grid-column-gap: 1px;
                               grid-row-gap: 1px;">');
                               while($img =  $result->fetch_assoc()){
-                                if ($img['image_content'] != 0){
-                                  echo('<img class="img-responsive pad" src="uploads/post/' . $img['image_content']. '" alt="Photo" style="display:flex">');
+                                if ($img['image_content'] != ""){
+                                  echo('<img class="img-responsive pad" src="uploads/' . $img['image_content']. '" alt="Photo" style="display:flex">');
                                 }
                               }
                               echo("</div>");

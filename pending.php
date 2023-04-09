@@ -292,7 +292,7 @@ $_SESSION['callFrom'] = "index.php";
                 $sql = "SELECT * FROM post INNER JOIN users ON post.id_user = users.id_user WHERE post.status='pending' ORDER BY post.id_post DESC";
                 $result = $conn->query($sql);
                 if($result->num_rows == 0){
-                  echo("0 pending post");
+                  echo("There is no post being waiting now.");
                 }
                 if($result->num_rows > 0) {
                   $i = 0;
@@ -311,7 +311,7 @@ $_SESSION['callFrom'] = "index.php";
                              echo '<img src="dist/img/avatar5.png" class="img-circle img-bordered-sm" alt="User Image">';
                           }
                         ?>
-                            <span class="username"><a href="#"><?php echo $row['name']; ?></a></span>
+                            <span class="username"><a href="#"><?php echo $row['name'] . "   " . "('$row[point]')"; ?></a></span>
                             <span class="description">Shared publicly - <?php echo date('d-M-Y h:i a', strtotime($row['createdAt'])); ?></span>
                           </div>
                         </div>
@@ -321,26 +321,57 @@ $_SESSION['callFrom'] = "index.php";
                             echo '<img class="img-responsive pad" src="uploads/post/'.$row['image'].'" alt="Photo">';
                           }
                         ?>
-
+                          <div style="font-size: 20px;font-weight : 600; width: 100px;display: flex; padding:8px">
+                              <div style="display:flex;background-color:green ; padding : 2px ; color:aliceblue;border-radius:5px ;font-size:smaller ; align-items: center;">Topic</div>
+                              <div style="padding: 4px">
+                                <?php echo $row['title']; ?>
+                              </div>
+                          </div>
+                          <?php ?>
+                          <p style="font-size: 18px;"><i class="fa-solid fa-location-dot" style="padding-right:2px"></i> <?php echo $row['location'];?></p>
                           <p><?php echo $row['description']; ?></p>
-                          <form action="" method="POST">
-                            <input type="text" name="id" value="<?php echo($row['id_post']); ?>" hidden>
-                            <input type="submit" name="btnAccept" value="Accept" class="btn btn-default btn-xs">
+                          <?php $sql = "SELECT * FROM images WHERE images.id_post = '$row[id_post]'";
+                            $result = $conn->query($sql);
+                            if($result->num_rows > 0) {
+                              echo('<div style="display:grid;grid-template-columns: 50% 50%;
+                              grid-row: auto auto;
+                              grid-column-gap: 1px;
+                              grid-row-gap: 1px;">');
+                              while($img =  $result->fetch_assoc()){
+                                if ($img['image_content'] != 0){
+                                  echo('<img class="img-responsive pad" src="uploads/post/' . $img['image_content']. '" alt="Photo" style="display:flex">');
+                                }
+                              }
+                              echo("</div>");
+                            } ?>
+                          <button type="button" class="btn btn-default btn-xs"><i class="fa fa-share"></i> Share</button>
+                          <?php
+                          $sql1 = "SELECT * FROM post WHERE id_user='$_SESSION[id_user]' AND id_post='$row[id_post]'";
+                          $result1 = $conn->query($sql1);
+                          //from likes
+                          if($result1->num_rows > 0) {
+                            ?>
+                            <button type="button" class="btn btn-default btn-xs" disabled><i class="fa fa-thumbs-o-up"></i> Like</button>
 
+                            <?php
+                          } else {
+                            ?>
+                               <button type="button" id="addLike" data-id="<?php echo $row['id_post']; ?>" class="btn btn-default btn-xs"><i class="fa fa-thumbs-o-up"></i> Like</button>
+                            <?php
+                          }
+                          ?>
+                          <form action="" method="POST">
+                            <button type="submit" name="form_submit" style="cursor : pointer"><i class="fa-solid fa-handshake-angle"></i>Attend</button> 
                           </form>
                           <?php
-                          if ($enable == 0 && $_SERVER['REQUEST_METHOD'] === 'POST'){
-                            // Something posted
-                            if (isset($_POST['btnAccept'])) {
-                              // btnDAccept 
-                              $sql = "UPDATE post SET status = 'air' WHERE post.id_post = '$_POST[id]'";
-                              $result1 = $conn->query($sql);
+                          if($enable == 0 && $_SERVER['REQUEST_METHOD'] === 'POST'){
+                            if(isset($_POST['form_submit']))
+                            {
+                              $sql_add= " INSERT INTO group_volunteer (id_group ,id_user, name , active) VALUES ($row[id_post],$_SESSION[id_user],'group $row[id_post]' ,'1')";
+                              $result_add = $conn->query($sql_add);
                               $enable = 1;
                               echo('<meta http-equiv="refresh" content="0.5">');
-                            } 
-                            // else {
-                            //   // Assume btnSubmit 
-                            // }
+                            }
                           }
                           ?>
                           <?php
@@ -353,7 +384,7 @@ $_SESSION['callFrom'] = "index.php";
                           $sql3 = "SELECT * FROM post WHERE id_post='$row[id_post]'";
                            //from comments
                           $result3 = $conn->query($sql3);
-                          $totalComments = (int)$result3->num_rows; 
+                          $totalComments = (int)$result3->num_rows;
                           ?>
                           <span class="pull-right text-muted commentBtn" onclick="toggleComments(<?php echo $i; ?>);"><?php echo $totalLikes; ?> likes - <?php echo $totalComments; ?> comments</span>
                         </div>
@@ -419,135 +450,59 @@ $_SESSION['callFrom'] = "index.php";
 
         <div class="col-md-4">
           <!-- USERS LIST -->
-          <div class="box box-danger">
+          <div class="box box-success">
             <div class="box-header with-border">
-              <h3 class="box-title">My Friends</h3>
-
-              <div class="box-tools pull-right">
-                <span class="label label-success">10 Online</span>
-              </div>
+              <h3 class="box-title">Location Filter</h3>
             </div>
-            <!-- /.box-header -->
-            <div class="box-body no-padding">
-              <ul class="users-list clearfix">
-                <li>
-                  <img src="dist/img/user1-128x128.jpg" alt="User Image">
-                  <a class="users-list-name" href="#">Alexander Pierce</a>
-                  <span class="users-list-date">Today</span>
-                </li>
-                <li>
-                  <img src="dist/img/user8-128x128.jpg" alt="User Image">
-                  <a class="users-list-name" href="#">Norman</a>
-                  <span class="users-list-date">Yesterday</span>
-                </li>
-                <li>
-                  <img src="dist/img/user7-128x128.jpg" alt="User Image">
-                  <a class="users-list-name" href="#">Jane</a>
-                  <span class="users-list-date">12 Jan</span>
-                </li>
-                <li>
-                  <img src="dist/img/user6-128x128.jpg" alt="User Image">
-                  <a class="users-list-name" href="#">John</a>
-                  <span class="users-list-date">12 Jan</span>
-                </li>
-                <li>
-                  <img src="dist/img/user2-160x160.jpg" alt="User Image">
-                  <a class="users-list-name" href="#">Alexander</a>
-                  <span class="users-list-date">13 Jan</span>
-                </li>
-                <li>
-                  <img src="dist/img/user5-128x128.jpg" alt="User Image">
-                  <a class="users-list-name" href="#">Sarah</a>
-                  <span class="users-list-date">14 Jan</span>
-                </li>
-                <li>
-                  <img src="dist/img/user4-128x128.jpg" alt="User Image">
-                  <a class="users-list-name" href="#">Nora</a>
-                  <span class="users-list-date">15 Jan</span>
-                </li>
-                <li>
-                  <img src="dist/img/user3-128x128.jpg" alt="User Image">
-                  <a class="users-list-name" href="#">Nadia</a>
-                  <span class="users-list-date">15 Jan</span>
-                </li>
-              </ul>
-              <!-- /.users-list -->
+            <div class="box-body" id="myBtnContainer">
+              <button type="button" class="btn btn-outline-success but active1">
+                All
+              </button>
+              <button type="button" class="btn btn-outline-success but">
+                1 st District
+              </button>
+              <button type="button" class="btn btn-outline-success but">
+                2 st District
+              </button>
+              <button type="button" class="btn btn-outline-success but">
+                3 st District
+              </button>
+              <button type="button" class="btn btn-outline-success but">
+                4 st District
+              </button>
+              <button type="button" class="btn btn-outline-success but">
+                Thu Duc District
+              </button>
+              <button type="button" class="btn btn-outline-success but">
+                Binh Thanh District
+              </button>
             </div>
-            <!-- /.box-body -->
-            <div class="box-footer text-center">
-              <a href="javascript:void(0)" class="uppercase">View All Users</a>
-            </div>
-            <!-- /.box-footer -->
           </div>
+
           <!--/.box -->
 
           <!-- PRODUCT LIST -->
           <div class="box box-primary">
             <div class="box-header with-border">
-              <h3 class="box-title">Suggested Pages</h3>
-
+              <h3 class="box-title">Category filter</h3>
             </div>
             <!-- /.box-header -->
-            <div class="box-body">
-              <ul class="products-list product-list-in-box">
-                <li class="item">
-                  <div class="product-img">
-                    <img src="dist/img/default-50x50.gif" alt="Product Image">
-                  </div>
-                  <div class="product-info">
-                    <a href="javascript:void(0)" class="product-title">Samsung TV
-                      <span class="label label-warning pull-right">25,000 Likes</span></a>
-                    <span class="product-description">
-                          Samsung 32" 1080p 60Hz LED Smart HDTV.
-                        </span>
-                  </div>
-                </li>
-                <!-- /.item -->
-                <li class="item">
-                  <div class="product-img">
-                    <img src="dist/img/default-50x50.gif" alt="Product Image">
-                  </div>
-                  <div class="product-info">
-                    <a href="javascript:void(0)" class="product-title">Bicycle
-                      <span class="label label-info pull-right">1500 Likes</span></a>
-                    <span class="product-description">
-                          26" Mongoose Dolomite Men's 7-speed, Navy Blue.
-                        </span>
-                  </div>
-                </li>
-                <!-- /.item -->
-                <li class="item">
-                  <div class="product-img">
-                    <img src="dist/img/default-50x50.gif" alt="Product Image">
-                  </div>
-                  <div class="product-info">
-                    <a href="javascript:void(0)" class="product-title">Xbox One <span
-                        class="label label-danger pull-right">500 Likes</span></a>
-                    <span class="product-description">
-                          Xbox One Console Bundle with Halo Master Chief Collection.
-                        </span>
-                  </div>
-                </li>
-                <!-- /.item -->
-                <li class="item">
-                  <div class="product-img">
-                    <img src="dist/img/default-50x50.gif" alt="Product Image">
-                  </div>
-                  <div class="product-info">
-                    <a href="javascript:void(0)" class="product-title">PlayStation 4
-                      <span class="label label-success pull-right">24,000 Likes</span></a>
-                    <span class="product-description">
-                          PlayStation 4 500GB Console (PS4)
-                        </span>
-                  </div>
-                </li>
-                <!-- /.item -->
-              </ul>
+            <div class="box-body" id="myBtnContainer1">
+              <button type="button" class="btn btn-outline-primary but1 active2">
+                All
+              </button>
+              <button type="button1" class="btn btn-outline-primary but1">
+                Environment
+              </button>
+              <button type="button1" class="btn btn-outline-primary but1">
+                Creature
+              </button>
+              <button type="button1" class="btn btn-outline-primary but1">
+                People
+              </button>
             </div>
-            <!-- /.box-body -->
-            <div class="box-footer text-center">
-              <a href="javascript:void(0)" class="uppercase">View All Pages</a>
-            </div>
+            <!-- /.box-body -->          
+          </div>
             <!-- /.box-footer -->
           </div>
           <!-- /.box -->
@@ -566,7 +521,7 @@ $_SESSION['callFrom'] = "index.php";
     <div class="pull-right hidden-xs">
       <b>Version</b> 1.0.0
     </div>
-    <strong>Copyright &copy; 2016-2017 <a href="index.php">Social Network</a>.</strong> All rights
+    <strong>Copyright &copy; 2016-2017 <a href="index.php">AtHeart</a>.</strong> All rights
     reserved.
   </footer>
 

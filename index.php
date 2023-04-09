@@ -30,7 +30,7 @@ $_SESSION['callFrom'] = "index.php";
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Social Network</title>
+  <title>AtHeart</title>
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
   <!-- Bootstrap 3.3.7 -->
@@ -89,11 +89,11 @@ $_SESSION['callFrom'] = "index.php";
   <header class="main-header">
 
     <!-- Logo -->
-    <a href="index2.html" class="logo">
+    <a href="index.php" class="logo">
       <!-- mini logo for sidebar mini 50x50 pixels -->
       <span class="logo-mini"><b>S</b>N</span>
       <!-- logo for regular state and mobile devices -->
-      <span class="logo-lg"><b>Social </b>Network</span>
+      <span class="logo-lg"><b>AtHeart </b></span>
     </a>
 
     <!-- Header Navbar: style can be found in header.less -->
@@ -296,12 +296,12 @@ $_SESSION['callFrom'] = "index.php";
                   <label for="">Post:</label>
                     <div>
                         <ul class="" style="padding-left : 20px ; cursor : pointer ; font-weight : 600;">
-                            <li class="rescue" onclick="check_rescue()" id="rescue p-1">Rescue</li>
+                            <li class="rescue" onclick="check_rescue()" id="rescue p-1">Emergency</li>
                             <li class="healing" onclick="check_healing()" id="healing p-1">Healing</li>
                         </ul>
                     </div>
                     <div class="rescue hidden">
-                        <input type="text" name="title" value="rescue" style="width: 0px; display: hidden"><br>
+                        <input type="text" name="title" value="rescue" style="width: 0px;"hidden><br>
                         <label for="">
                             <i class="fa-solid fa-location-dot"></i> Location:
                         </label>
@@ -355,7 +355,7 @@ $_SESSION['callFrom'] = "index.php";
                         </div>
                     </div>
                     <div class="healing hidden">
-                    <input type="text" name="title2" value="healing" class="w-0">
+                    <input type="text" name="title2" value="healing" class="w-0" hidden>
                     <label for="">
                         <i class="fa-solid fa-location-dot"></i> Location:
                     </label>
@@ -448,7 +448,7 @@ $_SESSION['callFrom'] = "index.php";
                           move_uploaded_file($file_temps[$key], "uploads/".$element);
                           $query = "INSERT INTO images (id_post, image_content)
                           VALUES ('$id_post', '$element')";
-                          $result =$conn->query($query);          
+                          $result =$conn->query($query);
                       }
                     }
                   }
@@ -516,16 +516,29 @@ $_SESSION['callFrom'] = "index.php";
                             echo '<img class="img-responsive pad" src="uploads/post/'.$row['image'].'" alt="Photo">';
                           }
                         ?>
-                          
-
                           <div style="font-size: 20px;font-weight : 600; width: 100px;display: flex; padding:8px">
                               <div style="display:flex;background-color:green ; padding : 2px ; color:aliceblue;border-radius:5px ;font-size:smaller ; align-items: center;">Topic</div>
                               <div style="padding: 4px">
                                 <?php echo $row['title']; ?>
                               </div>
                           </div>
+                          <?php ?>
                           <p style="font-size: 18px;"><i class="fa-solid fa-location-dot" style="padding-right:2px"></i> <?php echo $row['location'];?></p>
                           <p><?php echo $row['description']; ?></p>
+                          <?php $sql = "SELECT * FROM images WHERE images.id_post = '$row[id_post]'";
+                            $result = $conn->query($sql);
+                            if($result->num_rows > 0) {
+                              echo('<div style="display:grid;grid-template-columns: 50% 50%;
+                              grid-row: auto auto;
+                              grid-column-gap: 1px;
+                              grid-row-gap: 1px;">');
+                              while($img =  $result->fetch_assoc()){
+                                if ($img['image_content'] != 0){
+                                  echo('<img class="img-responsive pad" src="uploads/post/' . $img['image_content']. '" alt="Photo" style="display:flex">');
+                                }
+                              }
+                              echo("</div>");
+                            } ?>
                           <button type="button" class="btn btn-default btn-xs"><i class="fa fa-share"></i> Share</button>
                           <?php
                           $sql1 = "SELECT * FROM post WHERE id_user='$_SESSION[id_user]' AND id_post='$row[id_post]'";
@@ -702,7 +715,7 @@ $_SESSION['callFrom'] = "index.php";
     <div class="pull-right hidden-xs">
       <b>Version</b> 1.0.0
     </div>
-    <strong>Copyright &copy; 2016-2017 <a href="index.php">Social Network</a>.</strong> All rights
+    <strong>Copyright &copy; 2016-2017 <a href="index.php">AtHeart</a>.</strong> All rights
     reserved.
   </footer>
 
@@ -783,7 +796,7 @@ $_SESSION['callFrom'] = "index.php";
             $('.healing').addClass('hidden');
             $('.rescue').removeClass('hidden');
         }
-        function check_healing(){      
+        function check_healing(){
             $('.healing').removeClass('hidden');
             $('.rescue').addClass('hidden');
         }

@@ -288,14 +288,12 @@ $_SESSION['callFrom'] = "index.php";
           </div> -->
 
           <?php
-                $sql = "SELECT * FROM fund INNER JOIN users ON fund.id_user = users.id_user WHERE fund.status='air' AND fund.id_user='$_SESSION[id_user]' ORDER BY fund.id_post ASC";
+                $sql = "SELECT * FROM fund INNER JOIN users WHERE fund.id_user=users.id_user AND fund.id_user='$_SESSION[id_user]' AND fund.status='air' ORDER BY fund.id_post DESC";
                 $result = $conn->query($sql);
-                if($result->num_rows == 0){
-                  echo("You have no crowfund activity yet.");
-                }
                 if($result->num_rows > 0) {
                   $i = 0;
                   $enable = 0;
+                  $num = 0;
                   while($row =  $result->fetch_assoc()) {
                     $i++;
                     ?>
@@ -310,34 +308,72 @@ $_SESSION['callFrom'] = "index.php";
                              echo '<img src="dist/img/avatar5.png" class="img-circle img-bordered-sm" alt="User Image">';
                           }
                         ?>
-                            <span class="username"><a href="#"><?php echo $row['name']; ?></a></span>
+                            <span class="username"><a href="#"><?php echo $row['name'] . "   " . "($row[point])"; ?></a></span>
                             <span class="description">Shared publicly - <?php echo date('d-M-Y h:i a', strtotime($row['createdAt'])); ?></span>
                           </div>
                         </div>
                         <div class="box-body">
-                        <?php
-                          if($row['image'] != "") {
-                            echo '<img class="img-responsive pad" src="uploads/post/'.$row['image'].'" alt="Photo">';
-                          }
-                        ?>
-
+                          <?php $sql = "SELECT * FROM images_fund WHERE images_fund.id_post = '$row[id_post]'";
+                          $result = $conn->query($sql);
+                          if($result->num_rows > 0) {
+                            echo('<div style="display:grid;grid-template-columns: 50% 50%;
+                            grid-row: auto auto;
+                            grid-column-gap: 1px;
+                            grid-row-gap: 1px;">');
+                            while($img =  $result->fetch_assoc()){
+                              if ($img['image_content'] != ""){
+                                echo('<img class="img-responsive pad" src="uploads/post/' . $img['image_content']. '" alt="Photo" style="display:flex">');
+                              }
+                            }
+                            echo("</div>");
+                          } ?>
                           <p><?php echo $row['description']; ?></p>
-                          <a href="actionDetail.php?id_post=<?php echo $row['id_post']?>"><button>Checkout</button></a>
-                          <!-- <form action="actionDetail.php" method="POST">
-                            <input type="text" name="id" value="<?php echo($row['id_post']); ?>" hidden>
-                            <input type="submit" name="btnAccept" value="Checkout" class="btn btn-default btn-xs">
+                          <p>Target: <?php echo $row['target']; ?>VNĐ</p>
+                          <p><strong>Plan:</strong> We promise to use your money to do the good thing as first you want it to be:<br> <?php echo $row['plan']; ?></p>
+                          <label for="file">Funding progress:</label><br>
+                          <progress style="background-color: green; width:80vh; border-radius:50px;" id="file" value="<?php echo("$row[target]");?>" max="<?php echo("$row[target]");?>"> <?php echo("$row[current] / $row[target]");?>% </progress> <br>
 
+                          <form class="form-horizontal" action="" method="post" enctype="multipart/form-data">
+                            <input type="text" id="addcomment" class="form-control input-sm" placeholder="Enter your work after crowfunding" name="report">
+                            <input type="text" name="id" value="<?php echo($row['id_post']); ?>" hidden>
+                            <label for="">Sub images:</label><br>
+                              <input type="file" name="files[]" class="border-2 border-black" require multiple><br>
+                              <div class="pull-right margin-r-5">
+                              <button type="submit" name="submit_post1" class="btn btn-info">Post</button>
+
+                          <!-- <label class="btn btn-warning">Image
+                            <input type="file" name="image" id="ProfileImageBtn">
+                          </label> -->
+                        </div>
                           </form>
-                          //<?php
-                          //if ($enable == 0 && $_SERVER['REQUEST_METHOD'] === 'POST'){
+                          <?php
+                          if ($enable == 0 && $_SERVER['REQUEST_METHOD'] === 'POST'){
                             // Something posted
-                            //if (isset($_POST['btnAccept'])) {
+                            if (isset($_POST['submit_post1'])){
                               // btnDAccept
-                              //$enable = 1;
-                              //include('actionDetail.php');
-                            //}
-                          //}
-                          ?> -->
+                              $sql = "UPDATE fund SET report = '$_POST[report]' WHERE fund.id_post = '$_POST[id]'";
+                              $result1 = $conn->query($sql);
+                              $enable = 1;
+                              if(isset($_FILES["files"])) {
+                                $file_names = $_FILES['files']['name'];
+                                $file_temps = $_FILES['files']['tmp_name'];
+                                if($result1){
+                                  $query = "SELECT * FROM fund
+                                  ORDER BY id_post DESC LIMIT 1";
+                                  $result =$conn->query($query)->fetch_assoc();
+                                  $id_post = $result['id_post'];
+                                  foreach($file_names as $key => $element){
+                                    move_uploaded_file($file_temps[$key], "uploads/post/".$element);
+                                    $query = "INSERT INTO image_feedback (id_post, image_content)
+                                    VALUES ('$_POST[id]', '$element')";
+                                    $result =$conn->query($query);
+                                }
+                              }
+                            }
+                              echo('<meta http-equiv="refresh" content="0.5">');
+                            }
+                          }
+                          ?>
                           <?php
                           $sql2 = "SELECT * FROM fund WHERE id_post='$row[id_post]'";
                            //from likes
@@ -414,72 +450,10 @@ $_SESSION['callFrom'] = "index.php";
 
         <div class="col-md-4">
           <!-- USERS LIST -->
-          <div class="box box-danger">
-            <div class="box-header with-border">
-              <h3 class="box-title">My Friends</h3>
-
-              <div class="box-tools pull-right">
-                <span class="label label-success">10 Online</span>
-              </div>
-            </div>
-            <!-- /.box-header -->
-            <div class="box-body no-padding">
-              <ul class="users-list clearfix">
-                <li>
-                  <img src="dist/img/user1-128x128.jpg" alt="User Image">
-                  <a class="users-list-name" href="#">Alexander Pierce</a>
-                  <span class="users-list-date">Today</span>
-                </li>
-                <li>
-                  <img src="dist/img/user8-128x128.jpg" alt="User Image">
-                  <a class="users-list-name" href="#">Norman</a>
-                  <span class="users-list-date">Yesterday</span>
-                </li>
-                <li>
-                  <img src="dist/img/user7-128x128.jpg" alt="User Image">
-                  <a class="users-list-name" href="#">Jane</a>
-                  <span class="users-list-date">12 Jan</span>
-                </li>
-                <li>
-                  <img src="dist/img/user6-128x128.jpg" alt="User Image">
-                  <a class="users-list-name" href="#">John</a>
-                  <span class="users-list-date">12 Jan</span>
-                </li>
-                <li>
-                  <img src="dist/img/user2-160x160.jpg" alt="User Image">
-                  <a class="users-list-name" href="#">Alexander</a>
-                  <span class="users-list-date">13 Jan</span>
-                </li>
-                <li>
-                  <img src="dist/img/user5-128x128.jpg" alt="User Image">
-                  <a class="users-list-name" href="#">Sarah</a>
-                  <span class="users-list-date">14 Jan</span>
-                </li>
-                <li>
-                  <img src="dist/img/user4-128x128.jpg" alt="User Image">
-                  <a class="users-list-name" href="#">Nora</a>
-                  <span class="users-list-date">15 Jan</span>
-                </li>
-                <li>
-                  <img src="dist/img/user3-128x128.jpg" alt="User Image">
-                  <a class="users-list-name" href="#">Nadia</a>
-                  <span class="users-list-date">15 Jan</span>
-                </li>
-              </ul>
-              <!-- /.users-list -->
-            </div>
-            <!-- /.box-body -->
-            <div class="box-footer text-center">
-              <a href="javascript:void(0)" class="uppercase">View All Users</a>
-            </div>
-            <!-- /.box-footer -->
-          </div>
-          <!--/.box -->
-
           <!-- PRODUCT LIST -->
           <div class="box box-primary">
             <div class="box-header with-border">
-              <h3 class="box-title">Suggested Pages</h3>
+              <h3 class="box-title">News</h3>
 
             </div>
             <!-- /.box-header -->
@@ -490,10 +464,10 @@ $_SESSION['callFrom'] = "index.php";
                     <img src="dist/img/default-50x50.gif" alt="Product Image">
                   </div>
                   <div class="product-info">
-                    <a href="javascript:void(0)" class="product-title">Samsung TV
-                      <span class="label label-warning pull-right">25,000 Likes</span></a>
+                    <a href="javascript:void(0)" class="product-title">#Trồng rừng
+                      <span class="label label-warning pull-right text-green">123 Green Point</span></a>
                     <span class="product-description">
-                          Samsung 32" 1080p 60Hz LED Smart HDTV.
+                          Team ABC đã trồng 123 cây xanh tại Củ Chi.
                         </span>
                   </div>
                 </li>
@@ -503,10 +477,11 @@ $_SESSION['callFrom'] = "index.php";
                     <img src="dist/img/default-50x50.gif" alt="Product Image">
                   </div>
                   <div class="product-info">
-                    <a href="javascript:void(0)" class="product-title">Bicycle
-                      <span class="label label-info pull-right">1500 Likes</span></a>
+                    <a href="javascript:void(0)" class="product-title">#Đổi sách cũ lấy cây.
+                      <span class="label label-warning pull-right text-green">100 Green Point</span></a>
                     <span class="product-description">
-                          26" Mongoose Dolomite Men's 7-speed, Navy Blue.
+                          Buổi hội chợ môi trường đổi sách lấy cây xanh vừa </span> 
+                          <span class="product-description">  được team CYCLE tổ chức thành công.
                         </span>
                   </div>
                 </li>
@@ -516,10 +491,10 @@ $_SESSION['callFrom'] = "index.php";
                     <img src="dist/img/default-50x50.gif" alt="Product Image">
                   </div>
                   <div class="product-info">
-                    <a href="javascript:void(0)" class="product-title">Xbox One <span
-                        class="label label-danger pull-right">500 Likes</span></a>
+                    <a href="javascript:void(0)" class="product-title">#Giải cứu kênh rạch <span
+                        class="label label-danger pull-right text-green">500 Green Point</span></a>
                     <span class="product-description">
-                          Xbox One Console Bundle with Halo Master Chief Collection.
+                          Kênh nước đen đã được team ABC giải cứu!!!
                         </span>
                   </div>
                 </li>
@@ -529,10 +504,10 @@ $_SESSION['callFrom'] = "index.php";
                     <img src="dist/img/default-50x50.gif" alt="Product Image">
                   </div>
                   <div class="product-info">
-                    <a href="javascript:void(0)" class="product-title">PlayStation 4
-                      <span class="label label-success pull-right">24,000 Likes</span></a>
+                    <a href="javascript:void(0)" class="product-title">#Giải cứu động vật.
+                      <span class="label label-info pull-right">90 Point</span></a>
                     <span class="product-description">
-                          PlayStation 4 500GB Console (PS4)
+                          Team 4fun đã giải cứu thành công 2 cá thể khỉ quý hiếm bị bắt.
                         </span>
                   </div>
                 </li>

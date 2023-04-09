@@ -58,19 +58,14 @@
             <i class="fa fa-rotate-right"></i> <span>My Crowfunding</span>
           </a>
         </li>
-        <li>
+        <!-- <li>
           <a href="messages.php">
             <i class="fa fa-wechat"></i> <span>Messages</span>
           </a>
-        </li>
+        </li> -->
         <li>
-          <a href="friends.php">
-            <i class="fa fa-users"></i> <span>Friends</span>
-          </a>
-        </li>
-        <li>
-          <a href="pages.php">
-          <i class="fa-light fa-user-group"></i><span>Group</span>
+          <a href="group.php">
+          <i class="fa-sharp fa-solid fa-people-group" style="padding-right: 5px;"></i><span>Group</span>
           </a>
         </li>
         <li>
@@ -83,11 +78,11 @@
             <i class="fa fa-gift"></i> <span>Gifts</span>
           </a>
         </li>
-        <li>
+        <!-- <li>
           <a href="photos.php">
             <i class="fa  fa-file-photo-o"></i> <span>Photos</span>
           </a>
-        </li>
+        </li> -->
       </ul>
     </section>
     <!-- /.sidebar -->

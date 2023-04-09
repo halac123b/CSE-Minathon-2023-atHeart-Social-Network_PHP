@@ -419,7 +419,7 @@ $_SESSION['callFrom'] = "profile.php";
                         <label class="btn btn-warning">Image
                           <input type="file" name="image" id="ProfileImageBtn">
                         </label>
-                        
+
                       </div>
                       <button class="btn btn-warning pull-right margin-r-5">Video</button>
                       <div>
@@ -431,7 +431,7 @@ $_SESSION['callFrom'] = "profile.php";
                     <!-- /.box-footer -->
                   </form>
                 </div>
-                
+
                 <?php
 
                 $sql = "SELECT * FROM post INNER JOIN users WHERE post.id_user=users.id_user AND post.id_user='$_SESSION[id_user]' ORDER BY post.id_post DESC";

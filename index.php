@@ -1,4 +1,3 @@
-
 <?php
 
 session_start();
@@ -91,7 +90,7 @@ $_SESSION['callFrom'] = "index.php";
     <!-- Logo -->
     <a href="index.php" class="logo">
       <!-- mini logo for sidebar mini 50x50 pixels -->
-      <span class="logo-mini"><b>S</b>N</span>
+      <span class="logo-mini"><b>A</b>H</span>
       <!-- logo for regular state and mobile devices -->
       <span class="logo-lg"><b>AtHeart </b></span>
     </a>
@@ -286,26 +285,25 @@ $_SESSION['callFrom'] = "index.php";
         <div class="col-md-8 col-sm-6 col-xs-12">
           <div class="box box-info">
             <div class="box-header with-border">
-              <h3 class="box-title">Wall</h3>
+              <h3 class="box-title">Post:</h3>
             </div>
             <!-- /.box-header -->
             <!-- form start -->
             <form class="form-horizontal" action="" method="post" enctype="multipart/form-data">
-
-
-                  <label for="">Post:</label>
-                    <div>
-                        <ul class="" style="padding-left : 20px ; cursor : pointer ; font-weight : 600;">
-                            <li class="rescue" onclick="check_rescue()" id="rescue p-1">Emergency</li>
-                            <li class="healing" onclick="check_healing()" id="healing p-1">Healing</li>
+                  <label for="" class=""></label>
+                    <div class="">
+                        <ul class="" style="padding-left : 150px;padding-right : 40px; width:300px; cursor : pointer ; font-weight : 600;  display:flex;">
+                            <li class="rescue bg-red" onclick="check_rescue()" id="rescue p-1" style="width:100px; padding: 10px; text-align:center; margin:10px; display:flex; border: 2px solid red; border-radius: 5px;">Emergency</li>
+                            <li class="healing bg-green" onclick="check_healing()" id="healing p-1" style="width:100px; padding: 10px; text-align:center; margin:10px; border: 2px solid green; border-radius: 5px;">Healing</li>
+                            <a href="index.php"><li class="back bg-gray hidden" id="healing p-1" style="width:100px; padding: 10px; text-align:center; margin:10px; border: 2px solid green; border-radius: 5px;">Go back</li></a>
                         </ul>
                     </div>
-                    <div class="rescue hidden">
-                        <input type="text" name="title" value="rescue" style="width: 0px;"hidden><br>
+                    <div class="rescue hidden form-group" style="margin: 20px 120px;">
+                        <input type="text" name="title" value="Emergency" style="width: 0px;"hidden><br>
                         <label for="">
                             <i class="fa-solid fa-location-dot"></i> Location:
                         </label>
-                        <select name="location" id="location">
+                        <select name="location" id="location" class="form-control">
                             <option value="Quan1">Quan 1</option>
                             <option value="Quan2">Quan 2</option>
                             <option value="Quan3">Quan 3</option>
@@ -320,10 +318,10 @@ $_SESSION['callFrom'] = "index.php";
                             <option value="Quan12">Quan 12</option>
                             <option value="Quan_Binh_Thanh">Quan Binh Thanh</option>
                             <option value="Quan_Tan_Phu">Quan Tan Phu</option>
-                            <option value="Quan_Tan_Bnh">Quan Tan Binh</option>
+                            <option value="Quan_Tan_Binh">Quan Tan Binh</option>
                         </select><br>
                         <label for="">Description:</label><br>
-                        <textarea name="description" id="description" cols="30" rows="5" class="border-black border-2 p-2" placeholder="What's on your mind?"></textarea><br>
+                        <textarea name="description" id="description" cols="30" rows="5" placeholder="Detail description about your need"  class="form-control"></textarea><br>
                         <!-- <div class="">
                             <label for="">Grant Permission:</label><br>
                             <select class="border-2 border-black" name="permission" id="permission">
@@ -332,34 +330,34 @@ $_SESSION['callFrom'] = "index.php";
                                 <option value="city">City</option>
                                 <option value="central">Central</option>
                                 <option value="youth_group">Youth Group</option>
-                            </select>
+                            </select>                  
                         </div>                     -->
-                        <div class="">
+                        <div >
+                            <i class="fa-solid fa-clock p-1" style="padding: 2px"></i> 
                             <label for="">Time Limit:</label><br>
-                            <input type="number" name="time" id="time" class="border-2 border-black w-12">
+                            <input type="text" name="time" id="time" style="width: 30px">
                             minute
-                            <i class="fa-solid fa-clock p-1" style="padding: 2px"></i><br>  
                         </div><br>
                         <div class="">
                             <label for="">Green Point:</label><br>
-                            <input type="number" name="green_point" id="green_point" class="border-2 border-black w-12"><i class="fa-solid fa-shield-heart p-1" style="padding : 2px"></i><br>  
+                            <input type="text" name="green_point" id="green_point" class="border-2 border-black w-12" style="margin-right:3px; width:30px"><i class="fa-solid fa-shield-heart p-1" style="padding : 2px"></i><br>  
                         </div>
                        
                         <label for="">Sub images:</label><br>
                         <input type="file" name="files[]" class="border-2 border-black" require multiple><br>
-                        <div class="pull-right margin-r-5">
-                          <button type="submit" name="submit_post1" class="btn btn-info">Post</button> -->
+                        <div class="pull-center margin-r-5" style="margin: 0px 100px;">
+                          <button type="submit" name="submit_post1" class="btn btn-info">Post</button> 
                           <!-- <label class="btn btn-warning">Image
                             <input type="file" name="image" id="ProfileImageBtn">
                           </label> -->
                         </div>
                     </div>
-                    <div class="healing hidden">
+                    <div class="healing hidden form-group" style="margin: 40px 120px;">
                     <input type="text" name="title2" value="healing" class="w-0" hidden>
                     <label for="">
                         <i class="fa-solid fa-location-dot"></i> Location:
                     </label>
-                        <select name="location2" id="location2">
+                        <select name="location2" id="location2" class="form-control">
                             <option value="Quan1">Quan 1</option>
                             <option value="Quan2">Quan 2</option>
                             <option value="Quan3">Quan 3</option>
@@ -374,13 +372,13 @@ $_SESSION['callFrom'] = "index.php";
                             <option value="Quan12">Quan 12</option>
                             <option value="Quan_Binh_Thanh">Quan Binh Thanh</option>
                             <option value="Quan_Tan_Phu">Quan Tan Phu</option>
-                            <option value="Quan_Tan_Bnh">Quan Tan Binh</option>
+                            <option value="Quan_Tan_Binh">Quan Tan Binh</option>
                         </select><br>
                         <label for="">Description:</label><br>
-                        <textarea name="description2" id="description2" cols="30" rows="5" class="border-black border-2 p-2" placeholder="What's on your mind?"></textarea><br>
+                        <textarea name="description2" id="description2" cols="30" rows="5" placeholder="Detail description about your need"  class="form-control"></textarea><br>
                         <div class="">
                             <label for="">Grant Permission:</label><br>
-                            <select class="border-2 border-black" name="permission2" id="permission2">
+                            <select name="permission2" id="permission2"  class="form-control">
                                 <option value="none">None</option>
                                 <option value="wards">Wards</option>
                                 <option value="city">City</option>
@@ -390,16 +388,16 @@ $_SESSION['callFrom'] = "index.php";
                         </div>        
                         <div class="">
                             <label for="">People:</label><br>
-                            <input type="number" name="people2" id="people2" class="border-2 border-black w-12"><i class="fa-solid fa-person p-1" style="padding : 2px"></i><br>  
+                            <input type="text" name="people2" id="people2" class="border-2 border-black w-12"  style="width: 30px"><i class="fa-solid fa-person p-1" style="padding : 2px"></i><br>  
                         </div><br>
                         <div class="">
                             <label for="">Green Point:</label><br>
-                            <input type="number" name="green_point2" id="green_point2" class="border-2 border-black w-12"><i class="fa-solid fa-shield-heart p-1" style="padding : 2px"></i><br>  
+                            <input type="text" name="green_point2" id="green_point2" class="border-2 border-black w-12"  style="width: 30px"><i class="fa-solid fa-shield-heart p-1" style="padding : 2px"></i><br>  
                         </div>                    
                         <label for="">Sub images:</label><br>
                         <input type="file" name="files[]" class="border-2 border-black" require multiple><br>
-                        <div class="pull-right margin-r-5">
-                          <button type="submit" name="submit_post2" class="btn btn-info">Post</button> -->
+                        <div class="pull-left margin-r-5" style="margin: 0px 100px;">
+                          <button type="submit" name="submit_post2" class="btn btn-info">Post</button>
                           <!-- <label class="btn btn-warning">Image
                             <input type="file" name="image" id="ProfileImageBtn">
                           </label> -->
@@ -463,7 +461,7 @@ $_SESSION['callFrom'] = "index.php";
                     $file_names = $_FILES['files']['name'];
                     $file_temps = $_FILES['files']['tmp_name'];
                     $green_point = $_POST['green_point2'];
-                    $sql_add= " INSERT INTO post (id_user,title,location,description,permission,people,green_point ) VALUES ($_SESSION[id_user],'$title','$location','$description','$permission','$people','$green_point')";
+                    $sql_add= " INSERT INTO post (id_user,title,location,description,permission,people,green_point, status) VALUES ($_SESSION[id_user],'$title','$location','$description','$permission','$people','$green_point', 'pending')";
                     $result_add_post = $conn->query($sql_add);
                     if(isset($_FILES["files"])) {
                       if($result_add_post){
@@ -483,10 +481,10 @@ $_SESSION['callFrom'] = "index.php";
                   }
               }
               ?>
-
+          <div class="container1"> 
           <?php
 
-                $sql = "SELECT * FROM post INNER JOIN users WHERE post.id_user=users.id_user AND post.id_user='$_SESSION[id_user]' AND post.status='air' ORDER BY post.id_post DESC";
+                $sql = "SELECT * FROM post INNER JOIN users WHERE post.id_user=users.id_user  AND post.status='air' ORDER BY post.id_post DESC";
                 $result = $conn->query($sql);
 
                 if($result->num_rows > 0) {
@@ -496,7 +494,7 @@ $_SESSION['callFrom'] = "index.php";
                     $i++;
                     ?>
                       <!-- Box Comment -->
-                      <div class="box box-widget">
+                      <div style="display:none;" class="box box-widget filterDiv <?php echo $row['location']?>">
                         <div class="box-header with-border">
                           <div class="user-block">
                             <?php
@@ -513,45 +511,45 @@ $_SESSION['callFrom'] = "index.php";
                         <div class="box-body">
                         <?php
                           if($row['image'] != "") {
-                            echo '<img class="img-responsive pad" src="uploads/'.$row['image'].'" alt="Photo">';
+                            echo '<img class="img-responsive pad" src="uploads/post/'.$row['image'].'" alt="Photo">';
                           }
                         ?>
                           <div style="font-size: 20px;font-weight : 600; width: 100px;display: flex; padding:8px">
-                              <div style="display:flex;background-color:green ; padding : 2px ; color:aliceblue;border-radius:5px ;font-size:smaller ; align-items: center;">Topic</div>
+                              <div style="display:flex;background-color:green ; padding : 2px 8px; color:aliceblue;border-radius:5px ;font-size:smaller ; align-items: center;">Topic</div>
                               <div style="padding: 4px">
                                 <?php echo $row['title']; ?>
                               </div>
                           </div>
                           <?php ?>
                           <p style="font-size: 18px;"><i class="fa-solid fa-location-dot" style="padding-right:2px"></i> <?php echo $row['location'];?></p>
-                          <p><?php echo $row['description']; ?></p>
-                          <?php $sql = "SELECT * FROM images WHERE images.id_post = '$row[id_post]'";
-                            $result = $conn->query($sql);
-                            if($result->num_rows > 0) {
+                          <p style="font-size: 20px;"><?php echo $row['description']; ?></p>
+                          <?php $sql2 = "SELECT * FROM images WHERE images.id_post = '$row[id_post]'";
+                            $result2 = $conn->query($sql2);
+                            if($result2->num_rows > 0) {
                               echo('<div style="display:grid;grid-template-columns: 50% 50%;
                               grid-row: auto auto;
                               grid-column-gap: 1px;
                               grid-row-gap: 1px;">');
-                              while($img =  $result->fetch_assoc()){
+                              while($img =  $result2->fetch_assoc()){
                                 if ($img['image_content'] != ""){
                                   echo('<img class="img-responsive pad" src="uploads/' . $img['image_content']. '" alt="Photo" style="display:flex">');
                                 }
                               }
                               echo("</div>");
                             } ?>
-                          <button type="button" class="btn btn-default btn-xs"><i class="fa fa-share"></i> Share</button>
+                          <!-- <button type="button" class="btn btn-default btn-xs"><i class="fa fa-share"></i> Share</button> -->
                           <?php
                           $sql1 = "SELECT * FROM post WHERE id_user='$_SESSION[id_user]' AND id_post='$row[id_post]'";
                           $result1 = $conn->query($sql1);
                           //from likes
                           if($result1->num_rows > 0) {
                             ?>
-                            <button type="button" class="btn btn-default btn-xs" disabled><i class="fa fa-thumbs-o-up"></i> Like</button>
+                            <!-- <button type="button" class="btn btn-default btn-xs" disabled><i class="fa fa-thumbs-o-up"></i> Like</button> -->
 
                             <?php
                           } else {
                             ?>
-                               <button type="button" id="addLike" data-id="<?php echo $row['id_post']; ?>" class="btn btn-default btn-xs"><i class="fa fa-thumbs-o-up"></i> Like</button>
+                               <!-- <button type="button" id="addLike" data-id="<?php echo $row['id_post']; ?>" class="btn btn-default btn-xs"><i class="fa fa-thumbs-o-up"></i> Like</button> -->
                             <?php
                           }
                           ?>
@@ -642,7 +640,7 @@ $_SESSION['callFrom'] = "index.php";
                 }
                 ?>
         </div>
-
+        </div>
         <div class="col-md-4">
           <!-- USERS LIST -->
           <div class="box box-success">
@@ -650,26 +648,26 @@ $_SESSION['callFrom'] = "index.php";
               <h3 class="box-title">Location Filter</h3>
             </div>
             <div class="box-body" id="myBtnContainer">
-              <button type="button" class="btn btn-outline-success but active1">
+              <button type="button" class="btn btn-outline-success but active1" onclick="filterSelection('all')">
                 All
               </button>
-              <button type="button" class="btn btn-outline-success but">
-                1 st District
+              <button type="button" class="btn btn-outline-success but" onclick="filterSelection('Quan1')">
+                Quan 1
               </button>
-              <button type="button" class="btn btn-outline-success but">
-                2 st District
+              <button type="button" class="btn btn-outline-success but" onclick="filterSelection('Quan2')">
+                Quan 2 
               </button>
-              <button type="button" class="btn btn-outline-success but">
-                3 st District
+              <button type="button" class="btn btn-outline-success but" onclick="filterSelection('Quan3')">
+                Quan 3
               </button>
-              <button type="button" class="btn btn-outline-success but">
-                4 st District
+              <button type="button" class="btn btn-outline-success but" onclick="filterSelection('Quan4')">
+                Quan 4
               </button>
-              <button type="button" class="btn btn-outline-success but">
-                Thu Duc District
+              <button type="button" class="btn btn-outline-success but" onclick="filterSelection('Quan_Tan_Phu')">
+                Quan Tan Phu
               </button>
-              <button type="button" class="btn btn-outline-success but">
-                Binh Thanh District
+              <button type="button" class="btn btn-outline-success but" onclick="filterSelection('Quan_Binh_Thanh')">
+                Quan Binh Thanh
               </button>
             </div>
           </div>
@@ -763,6 +761,38 @@ $_SESSION['callFrom'] = "index.php";
   }
 </script>
 <script>
+  filterSelection("all")
+function filterSelection(c) {
+  var x, i;
+  x = document.getElementsByClassName("filterDiv");
+  if (c == "all") c = "";
+  for (i = 0; i < x.length; i++) {
+    w3RemoveClass(x[i], "show");
+    if (x[i].className.indexOf(c) > -1) w3AddClass(x[i], "show");
+  }
+}
+
+function w3AddClass(element, name) {
+  var i, arr1, arr2;
+  arr1 = element.className.split(" ");
+  arr2 = name.split(" ");
+  for (i = 0; i < arr2.length; i++) {
+    if (arr1.indexOf(arr2[i]) == -1) {element.className += " " + arr2[i];}
+  }
+}
+
+function w3RemoveClass(element, name) {
+  var i, arr1, arr2;
+  arr1 = element.className.split(" ");
+  arr2 = name.split(" ");
+  for (i = 0; i < arr2.length; i++) {
+    while (arr1.indexOf(arr2[i]) > -1) {
+      arr1.splice(arr1.indexOf(arr2[i]), 1);
+    }
+  }
+  element.className = arr1.join(" ");
+}
+
   var btnContainer1 = document.getElementById("myBtnContainer1");
   var btns1 = btnContainer1.getElementsByClassName("but1");
   console.log(btns1.length);
@@ -795,10 +825,12 @@ $_SESSION['callFrom'] = "index.php";
         function check_rescue(){
             $('.healing').addClass('hidden');
             $('.rescue').removeClass('hidden');
+            $('.back').removeClass('hidden');
         }
         function check_healing(){
             $('.healing').removeClass('hidden');
             $('.rescue').addClass('hidden');
+            $('.back').removeClass('hidden');
         }
     </script>
 

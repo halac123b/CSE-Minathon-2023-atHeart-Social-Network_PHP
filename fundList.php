@@ -37,6 +37,7 @@ $_SESSION['callFrom'] = "index.php";
   <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
   <!-- Font Awesome -->
   <link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <!-- Theme style -->
   <link rel="stylesheet" href="dist/css/AdminLTE.min.css">
   <!-- AdminLTE Skins. Choose a skin from the css/skins
@@ -250,7 +251,7 @@ $_SESSION['callFrom'] = "index.php";
 
     <section class="content-header">
       <h1>
-        News Feed
+        FUND RAISING
       </h1>
     </section>
     <!-- Main content -->
@@ -265,14 +266,14 @@ $_SESSION['callFrom'] = "index.php";
             <!-- /.box-header -->
             <!-- form start -->
             <button onclick="checkStart()">Send a crowfund program</button>
+            <form class="form-horizontal" action="" method="post" enctype="multipart/form-data">
             <div class="fundForm hidden">
-                    <input type="text" name="title2" value="fundForm" class="w-0" hidden>
-                    <label for="">
+                    <!-- <label for="">
                         <i class="fa-solid fa-location-dot"></i> Location:
-                    </label>
+                    </label> -->
                         <label for="">Description:</label><br>
                         <textarea name="description2" id="description2" cols="30" rows="5" class="border-black border-2 p-2" placeholder="What's on your mind?"></textarea><br>
-                        <div class="">
+                        <!-- <div class="">
                             <label for="">Grant Permission:</label><br>
                             <select class="border-2 border-black" name="permission2" id="permission2">
                                 <option value="none">None</option>
@@ -280,27 +281,55 @@ $_SESSION['callFrom'] = "index.php";
                                 <option value="city">City</option>
                                 <option value="central">Central</option>
                                 <option value="youth_group">Youth Group</option>
-                            </select>                  
-                        </div>        
+                            </select>
+                        </div> -->
                         <div class="">
-                            <label for="">People:</label><br>
-                            <input type="number" name="people2" id="people2" class="border-2 border-black w-12"><i class="fa-solid fa-person p-1" style="padding : 2px"></i><br>  
+                            <label for="">Target money (VND):</label><br>
+                            <input type="number" name="target" id="people2" class="border-2 border-black w-12"><i class="fa-solid fa-person p-1" style="padding : 2px"></i><br>  
                         </div><br>
-                        <div class="">
+                        </label>
+                        <label for="">Plan to use the money:</label><br>
+                        <textarea name="plan" id="plan" cols="30" rows="5" class="border-black border-2 p-2" placeholder="Your plan"></textarea><br>
+                        <!-- <div class="">
                             <label for="">Green Point:</label><br>
                             <input type="number" name="green_point2" id="green_point2" class="border-2 border-black w-12"><i class="fa-solid fa-shield-heart p-1" style="padding : 2px"></i><br>  
-                        </div>                    
-                        <label for="">Sub images:</label><br>
+                        </div> -->
+                        <label for="">Proof images:</label><br>
                         <input type="file" name="files[]" class="border-2 border-black" require multiple><br>
-                        <div class="pull-right margin-r-5">
-                          <button type="submit" name="submit_post2" class="btn btn-info">Post</button> -->
-                          <!-- <label class="btn btn-warning">Image
-                            <input type="file" name="image" id="ProfileImageBtn">
-                          </label> -->
-                        </div>
-                 
+                        <button type="submit" name="submit_post2" class="btn btn-info">Post</button>
                 </div>
+              </form>
           </div>
+          <?php
+            if($_SERVER['REQUEST_METHOD'] === 'POST'){
+              if(isset($_POST['submit_post2'])){
+                //$location = $_POST['location2'];
+                $description = $_POST['description2'];
+                $plan = $_POST['plan'];
+                // $permission = $_POST['permission2'];
+                $target = $_POST['target'];
+                $file_names = $_FILES['files']['name'];
+                $file_temps = $_FILES['files']['tmp_name'];
+                $sql_add= " INSERT INTO fund (id_user,description,target, plan, status) VALUES ($_SESSION[id_user],'$description','$target', '$plan', 'air')";
+                $result_add_post = $conn->query($sql_add);
+                if(isset($_FILES["files"])) {
+                  if($result_add_post){
+                    $query = "SELECT * FROM fund
+                    ORDER BY id_post DESC LIMIT 1";
+                    $result =$conn->query($query)->fetch_assoc();
+                    $id_post = $result['id_post'];
+                     foreach($file_names as $key => $element){
+                      move_uploaded_file($file_temps[$key], "uploads/post/".$element);
+                      $query = "INSERT INTO images_fund (id_post, image_content)
+                      VALUES ('$id_post', '$element')";
+                      $result =$conn->query($query);
+                  }
+                }
+              }
+                // echo('<meta http-equiv="refresh" content="0.5">');
+              }
+            }
+          ?>
 
           <?php
                 $sql = "SELECT * FROM fund INNER JOIN users WHERE fund.id_user=users.id_user AND fund.id_user='$_SESSION[id_user]' AND fund.status='air' ORDER BY fund.id_post DESC";
@@ -323,23 +352,36 @@ $_SESSION['callFrom'] = "index.php";
                              echo '<img src="dist/img/avatar5.png" class="img-circle img-bordered-sm" alt="User Image">';
                           }
                         ?>
-                            <span class="username"><a href="#"><?php echo $row['name'] . "   " . "($row[point])"; ?></a></span>
+                            <span class="username">
+                              <a href="#"><?php echo $row['name'] . "   " . " - $row[point]"; ?>
+                                <i class="fa-solid fa-shield-heart"></i>
+                              </a>
+                            </span>
                             <span class="description">Shared publicly - <?php echo date('d-M-Y h:i a', strtotime($row['createdAt'])); ?></span>
                           </div>
                         </div>
                         <div class="box-body">
-                        <?php
-                          if($row['image'] != "") {
-                            echo '<img class="img-responsive pad" src="uploads/post/'.$row['image'].'" alt="Photo">';
-                          }
-                        ?>
+                          <?php $sql = "SELECT * FROM images_fund WHERE images_fund.id_post = '$row[id_post]'";
+                          $result = $conn->query($sql);
+                          if($result->num_rows > 0) {
+                            echo('<div style="display:grid;grid-template-columns: 50% 50%;
+                            grid-row: auto auto;
+                            grid-column-gap: 1px;
+                            grid-row-gap: 1px;">');
+                            while($img =  $result->fetch_assoc()){
+                              if ($img['image_content'] != ""){
+                                echo('<img class="img-responsive pad" src="uploads/post/' . $img['image_content']. '" alt="Photo" style="display:flex">');
+                              }
+                            }
+                            echo("</div>");
+                          } ?>
 
-                          <p><?php echo $row['description']; ?></p>
-                          <p>Target: <?php echo $row['target']; ?>VNĐ</p>
-                          <p><strong>Plan:</strong> We promise to use your money to do the good thing as first you want it to be:<br> <?php echo $row['plan']; ?></p>
+                          <p style='font-size:20px;'><?php echo $row['description']; ?></p>
+                          <p style="font-size">Target: <?php echo $row['target']; ?>VNĐ</p>
+                          <p style='font-size:20px;'><strong>Plan:</strong> We promise to use your money to do the good thing as first you want it to be:<br> <?php echo $row['plan']; ?></p>
                           <label for="file">Funding progress:</label><br>
-                          <progress style="background-color: green; width:80vh; border-radius:50px;" id="file" value="<?php echo("$row[current]");?>" max="<?php echo("$row[target]");?>"> <?php echo("$row[current] / $row[target]");?>% </progress> <br>
-                          <button type="button" class="btn btn-default btn-xs" onclick="showDialog(<?php echo($num);?>)"><i class="fa fa-money"></i>&nbsp;&nbsp;Donate</button>
+                          <progress style="background-color: green; width:100%; border-radius:50px;" id="file" value="<?php echo("$row[current]");?>" max="<?php echo("$row[target]");?>"> <?php echo("$row[current] / $row[target]");?>% </progress> <br>
+                          <button type="button" class="btn btn-default btn-xs" onclick="showDialog(<?php echo($num);?>)"><i class="fa fa-money"></i>&nbsp;&nbsp;Donate</button><br>
                           <form action="" method="POST" id="donateBtn<?php echo($num);?>" style="display:none;">
                             <input type="text" name="money">
                             <input type="submit" name="btnAccept" value="Accept" class="btn btn-default btn-xs">
@@ -355,6 +397,26 @@ $_SESSION['callFrom'] = "index.php";
                             }
                           </script>
                           <?php
+                            if ($row["report"] != ""){
+                              echo("<p1 style='font-size:20px;'><strong>Deploy process:</strong> Thanks to your contribution, we have done some good things to our community:<br>
+                              $row[report]</p1>");
+                            }
+                          ?>
+                          <?php $sql = "SELECT * FROM image_feedback WHERE image_feedback.id_post = '$row[id_post]'";
+                          $result = $conn->query($sql);
+                          if($result->num_rows > 0) {
+                            echo('<div style="display:grid;grid-template-columns: 50% 50%;
+                            grid-row: auto auto;
+                            grid-column-gap: 1px;
+                            grid-row-gap: 1px;">');
+                            while($img =  $result->fetch_assoc()){
+                              if ($img['image_content'] != ""){
+                                echo('<img class="img-responsive pad" src="uploads/post/' . $img['image_content']. '" alt="Photo" style="display:flex">');
+                              }
+                            }
+                            echo("</div>");
+                          } ?>
+                          <?php
                           if ($enable == 0 && $_SERVER['REQUEST_METHOD'] === 'POST'){
                             // Something posted
                             if (isset($_POST['btnAccept'])) {
@@ -363,24 +425,11 @@ $_SESSION['callFrom'] = "index.php";
                               $star = intval($_POST['money'] / 10000);
                               $sql1 = "UPDATE users SET point = point + '$_POST[money]' / 10000 WHERE users.id_user = '$_SESSION[id_user]'";
                               $result1 = $conn->query($sql1);
-                              echo("<script>alert('Thank you very much for your contribution, you gain $star". " Point for our gratefulness <3');</script>");
+                              echo("<script>alert('Thank you very much for your contribution, you gain $star". " Point for our gratefulness <3');
+                              window.location.href='fundList.php'</script>");
                               $enable = 1;
                               // echo("<script>
                               //   alert('Thank you very much for your contribution, you gain for our gratefulness <3');</script>");
-                            }
-                          }
-                          ?>
-                          <form action="" method="POST">
-                            <button type="submit" name="form_submit" style="cursor : pointer"><i class="fa-solid fa-handshake-angle"></i>Attend</button> 
-                          </form>
-                          <?php
-                          if($enable == 0 && $_SERVER['REQUEST_METHOD'] === 'POST'){
-                            if(isset($_POST['form_submit']))
-                            {
-                              $sql_add= " INSERT INTO group_volunteer (id_group ,id_user, name , active, status) VALUES ($row[id_post],$_SESSION[id_user],'group $row[id_post]' ,'1', 'pending')";
-                              $result_add = $conn->query($sql_add);
-                              $enable = 1;
-                              echo('<meta http-equiv="refresh" content="0.5">');
                             }
                           }
                           ?>
@@ -434,6 +483,7 @@ $_SESSION['callFrom'] = "index.php";
                         }
                         ?>
 
+
                         </div>
                         <!-- /.box-footer -->
                         <div class="box-footer">
@@ -458,75 +508,12 @@ $_SESSION['callFrom'] = "index.php";
                 }
                 ?>
         </div>
-
         <div class="col-md-4">
           <!-- USERS LIST -->
-          <div class="box box-danger">
-            <div class="box-header with-border">
-              <h3 class="box-title">Filter</h3>
-
-              <div class="box-tools pull-right">
-                <span class="label label-success">10 Online</span>
-              </div>
-            </div>
-            <!-- /.box-header -->
-            <div class="box-body no-padding">
-              <ul class="users-list clearfix">
-                <li>
-                  <img src="dist/img/user1-128x128.jpg" alt="User Image">
-                  <a class="users-list-name" href="#">Alexander Pierce</a>
-                  <span class="users-list-date">Today</span>
-                </li>
-                <li>
-                  <img src="dist/img/user8-128x128.jpg" alt="User Image">
-                  <a class="users-list-name" href="#">Norman</a>
-                  <span class="users-list-date">Yesterday</span>
-                </li>
-                <li>
-                  <img src="dist/img/user7-128x128.jpg" alt="User Image">
-                  <a class="users-list-name" href="#">Jane</a>
-                  <span class="users-list-date">12 Jan</span>
-                </li>
-                <li>
-                  <img src="dist/img/user6-128x128.jpg" alt="User Image">
-                  <a class="users-list-name" href="#">John</a>
-                  <span class="users-list-date">12 Jan</span>
-                </li>
-                <li>
-                  <img src="dist/img/user2-160x160.jpg" alt="User Image">
-                  <a class="users-list-name" href="#">Alexander</a>
-                  <span class="users-list-date">13 Jan</span>
-                </li>
-                <li>
-                  <img src="dist/img/user5-128x128.jpg" alt="User Image">
-                  <a class="users-list-name" href="#">Sarah</a>
-                  <span class="users-list-date">14 Jan</span>
-                </li>
-                <li>
-                  <img src="dist/img/user4-128x128.jpg" alt="User Image">
-                  <a class="users-list-name" href="#">Nora</a>
-                  <span class="users-list-date">15 Jan</span>
-                </li>
-                <li>
-                  <img src="dist/img/user3-128x128.jpg" alt="User Image">
-                  <a class="users-list-name" href="#">Nadia</a>
-                  <span class="users-list-date">15 Jan</span>
-                </li>
-              </ul>
-              <!-- /.users-list -->
-            </div>
-            <!-- /.box-body -->
-            <div class="box-footer text-center">
-              <a href="javascript:void(0)" class="uppercase">View All Users</a>
-            </div>
-            <!-- /.box-footer -->
-          </div>
-          <!--/.box -->
-
           <!-- PRODUCT LIST -->
           <div class="box box-primary">
             <div class="box-header with-border">
-              <h3 class="box-title">Suggested Pages</h3>
+              <h3 class="box-title">News</h3>
 
             </div>
             <!-- /.box-header -->
@@ -537,10 +524,10 @@ $_SESSION['callFrom'] = "index.php";
                     <img src="dist/img/default-50x50.gif" alt="Product Image">
                   </div>
                   <div class="product-info">
-                    <a href="javascript:void(0)" class="product-title">Samsung TV
-                      <span class="label label-warning pull-right">25,000 Likes</span></a>
+                    <a href="javascript:void(0)" class="product-title">#Trồng rừng
+                      <span class="label label-warning pull-right text-green">123 Green Point</span></a>
                     <span class="product-description">
-                          Samsung 32" 1080p 60Hz LED Smart HDTV.
+                          Team ABC đã trồng 123 cây xanh tại Củ Chi.
                         </span>
                   </div>
                 </li>
@@ -550,10 +537,11 @@ $_SESSION['callFrom'] = "index.php";
                     <img src="dist/img/default-50x50.gif" alt="Product Image">
                   </div>
                   <div class="product-info">
-                    <a href="javascript:void(0)" class="product-title">Bicycle
-                      <span class="label label-info pull-right">1500 Likes</span></a>
+                    <a href="javascript:void(0)" class="product-title">#Đổi sách cũ lấy cây.
+                      <span class="label label-warning pull-right text-green">100 Green Point</span></a>
                     <span class="product-description">
-                          26" Mongoose Dolomite Men's 7-speed, Navy Blue.
+                          Buổi hội chợ môi trường đổi sách lấy cây xanh vừa </span> 
+                          <span class="product-description">  được team CYCLE tổ chức thành công.
                         </span>
                   </div>
                 </li>
@@ -563,10 +551,10 @@ $_SESSION['callFrom'] = "index.php";
                     <img src="dist/img/default-50x50.gif" alt="Product Image">
                   </div>
                   <div class="product-info">
-                    <a href="javascript:void(0)" class="product-title">Xbox One <span
-                        class="label label-danger pull-right">500 Likes</span></a>
+                    <a href="javascript:void(0)" class="product-title">#Giải cứu kênh rạch <span
+                        class="label label-danger pull-right text-green">500 Green Point</span></a>
                     <span class="product-description">
-                          Xbox One Console Bundle with Halo Master Chief Collection.
+                          Kênh nước đen đã được team ABC giải cứu!!!
                         </span>
                   </div>
                 </li>
@@ -576,10 +564,10 @@ $_SESSION['callFrom'] = "index.php";
                     <img src="dist/img/default-50x50.gif" alt="Product Image">
                   </div>
                   <div class="product-info">
-                    <a href="javascript:void(0)" class="product-title">PlayStation 4
-                      <span class="label label-success pull-right">24,000 Likes</span></a>
+                    <a href="javascript:void(0)" class="product-title">#Giải cứu động vật.
+                      <span class="label label-info pull-right">90 Point</span></a>
                     <span class="product-description">
-                          PlayStation 4 500GB Console (PS4)
+                          Team 4fun đã giải cứu thành công 2 cá thể khỉ quý hiếm bị bắt.
                         </span>
                   </div>
                 </li>
@@ -590,6 +578,13 @@ $_SESSION['callFrom'] = "index.php";
             <div class="box-footer text-center">
               <a href="javascript:void(0)" class="uppercase">View All Pages</a>
             </div>
+            <!-- /.box-footer -->
+          </div>
+          <!-- /.box -->
+
+
+        </div>
+
             <!-- /.box-footer -->
           </div>
           <!-- /.box -->

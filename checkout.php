@@ -33,6 +33,7 @@ $_SESSION['callFrom'] = "index.php";
   <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
   <!-- Font Awesome -->
   <link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <!-- Theme style -->
   <link rel="stylesheet" href="dist/css/AdminLTE.min.css">
   <!-- AdminLTE Skins. Choose a skin from the css/skins
@@ -290,9 +291,7 @@ $_SESSION['callFrom'] = "index.php";
           <?php
                 $sql = "SELECT * FROM post INNER JOIN users ON post.id_user = users.id_user WHERE post.status='air' AND post.id_user='$_SESSION[id_user]' ORDER BY post.id_post ASC";
                 $result = $conn->query($sql);
-                if($result->num_rows == 0){
-                  echo("You have no activity yet.");
-                }
+
                 if($result->num_rows > 0) {
                   $i = 0;
                   $enable = 0;
@@ -300,7 +299,7 @@ $_SESSION['callFrom'] = "index.php";
                     $i++;
                     ?>
                       <!-- Box Comment -->
-                      <div class="box box-widget">
+                      <div class="box box-widget filterDiv <?php echo $row['location']?>">
                         <div class="box-header with-border">
                           <div class="user-block">
                             <?php
@@ -310,7 +309,7 @@ $_SESSION['callFrom'] = "index.php";
                              echo '<img src="dist/img/avatar5.png" class="img-circle img-bordered-sm" alt="User Image">';
                           }
                         ?>
-                            <span class="username"><a href="#"><?php echo $row['name']; ?></a></span>
+                            <span class="username"><a href="#"><?php echo $row['name'] . "   " . "('$row[point]')"; ?></a></span>
                             <span class="description">Shared publicly - <?php echo date('d-M-Y h:i a', strtotime($row['createdAt'])); ?></span>
                           </div>
                         </div>
@@ -320,24 +319,32 @@ $_SESSION['callFrom'] = "index.php";
                             echo '<img class="img-responsive pad" src="uploads/post/'.$row['image'].'" alt="Photo">';
                           }
                         ?>
-
-                          <p><?php echo $row['description']; ?></p>
-                          <a href="actionDetail.php?id_post=<?php echo $row['id_post']?>"><button>Checkout</button></a>
-                          <!-- <form action="actionDetail.php" method="POST">
-                            <input type="text" name="id" value="<?php echo($row['id_post']); ?>" hidden>
-                            <input type="submit" name="btnAccept" value="Checkout" class="btn btn-default btn-xs">
-
-                          </form>
-                          //<?php
-                          //if ($enable == 0 && $_SERVER['REQUEST_METHOD'] === 'POST'){
-                            // Something posted
-                            //if (isset($_POST['btnAccept'])) {
-                              // btnDAccept
-                              //$enable = 1;
-                              //include('actionDetail.php');
-                            //}
-                          //}
-                          ?> -->
+                          <div style="font-size: 20px;font-weight : 600; width: 100px;display: flex; padding:8px">
+                              <div style="display:flex;background-color:green ; padding : 2px 8px; color:aliceblue;border-radius:5px ;font-size:smaller ; align-items: center;">Topic</div>
+                              <div style="padding: 4px">
+                                <?php echo $row['title']; ?>
+                              </div>
+                          </div>
+                          <?php ?>
+                          <p style="font-size: 18px;"><i class="fa-solid fa-location-dot" style="padding-right:2px"></i> <?php echo $row['location'];?></p>
+                          <p style="font-size: 20px;"><?php echo $row['description']; ?></p>
+                          <?php $sql2 = "SELECT * FROM images WHERE images.id_post = '$row[id_post]'";
+                            $result2 = $conn->query($sql2);
+                            if($result2->num_rows > 0) {
+                              echo('<div style="display:grid;grid-template-columns: 50% 50%;
+                              grid-row: auto auto;
+                              grid-column-gap: 1px;
+                              grid-row-gap: 1px;">');
+                              while($img =  $result2->fetch_assoc()){
+                                if ($img['image_content'] != ""){
+                                  echo('<img class="img-responsive pad" src="uploads/' . $img['image_content']. '" alt="Photo" style="display:flex">');
+                                }
+                              }
+                              echo("</div>");
+                            } ?>
+                             <a href="actionDetail.php?id_post=<?php echo $row['id_post']?>"><button>Checkout</button></a>
+                          <!-- <button type="button" class="btn btn-default btn-xs"><i class="fa fa-share"></i> Share</button> -->
+                          
                           <?php
                           $sql2 = "SELECT * FROM post WHERE id_post='$row[id_post]'";
                            //from likes
@@ -348,7 +355,7 @@ $_SESSION['callFrom'] = "index.php";
                           $sql3 = "SELECT * FROM post WHERE id_post='$row[id_post]'";
                            //from comments
                           $result3 = $conn->query($sql3);
-                          $totalComments = (int)$result3->num_rows; 
+                          $totalComments = (int)$result3->num_rows;
                           ?>
                           <span class="pull-right text-muted commentBtn" onclick="toggleComments(<?php echo $i; ?>);"><?php echo $totalLikes; ?> likes - <?php echo $totalComments; ?> comments</span>
                         </div>
@@ -411,75 +418,12 @@ $_SESSION['callFrom'] = "index.php";
                 }
                 ?>
         </div>
-
         <div class="col-md-4">
           <!-- USERS LIST -->
-          <div class="box box-danger">
-            <div class="box-header with-border">
-              <h3 class="box-title">My Friends</h3>
-
-              <div class="box-tools pull-right">
-                <span class="label label-success">10 Online</span>
-              </div>
-            </div>
-            <!-- /.box-header -->
-            <div class="box-body no-padding">
-              <ul class="users-list clearfix">
-                <li>
-                  <img src="dist/img/user1-128x128.jpg" alt="User Image">
-                  <a class="users-list-name" href="#">Alexander Pierce</a>
-                  <span class="users-list-date">Today</span>
-                </li>
-                <li>
-                  <img src="dist/img/user8-128x128.jpg" alt="User Image">
-                  <a class="users-list-name" href="#">Norman</a>
-                  <span class="users-list-date">Yesterday</span>
-                </li>
-                <li>
-                  <img src="dist/img/user7-128x128.jpg" alt="User Image">
-                  <a class="users-list-name" href="#">Jane</a>
-                  <span class="users-list-date">12 Jan</span>
-                </li>
-                <li>
-                  <img src="dist/img/user6-128x128.jpg" alt="User Image">
-                  <a class="users-list-name" href="#">John</a>
-                  <span class="users-list-date">12 Jan</span>
-                </li>
-                <li>
-                  <img src="dist/img/user2-160x160.jpg" alt="User Image">
-                  <a class="users-list-name" href="#">Alexander</a>
-                  <span class="users-list-date">13 Jan</span>
-                </li>
-                <li>
-                  <img src="dist/img/user5-128x128.jpg" alt="User Image">
-                  <a class="users-list-name" href="#">Sarah</a>
-                  <span class="users-list-date">14 Jan</span>
-                </li>
-                <li>
-                  <img src="dist/img/user4-128x128.jpg" alt="User Image">
-                  <a class="users-list-name" href="#">Nora</a>
-                  <span class="users-list-date">15 Jan</span>
-                </li>
-                <li>
-                  <img src="dist/img/user3-128x128.jpg" alt="User Image">
-                  <a class="users-list-name" href="#">Nadia</a>
-                  <span class="users-list-date">15 Jan</span>
-                </li>
-              </ul>
-              <!-- /.users-list -->
-            </div>
-            <!-- /.box-body -->
-            <div class="box-footer text-center">
-              <a href="javascript:void(0)" class="uppercase">View All Users</a>
-            </div>
-            <!-- /.box-footer -->
-          </div>
-          <!--/.box -->
-
           <!-- PRODUCT LIST -->
           <div class="box box-primary">
             <div class="box-header with-border">
-              <h3 class="box-title">Suggested Pages</h3>
+              <h3 class="box-title">News</h3>
 
             </div>
             <!-- /.box-header -->
@@ -490,10 +434,10 @@ $_SESSION['callFrom'] = "index.php";
                     <img src="dist/img/default-50x50.gif" alt="Product Image">
                   </div>
                   <div class="product-info">
-                    <a href="javascript:void(0)" class="product-title">Samsung TV
-                      <span class="label label-warning pull-right">25,000 Likes</span></a>
+                    <a href="javascript:void(0)" class="product-title">#Trồng rừng
+                      <span class="label label-warning pull-right text-green">123 Green Point</span></a>
                     <span class="product-description">
-                          Samsung 32" 1080p 60Hz LED Smart HDTV.
+                          Team ABC đã trồng 123 cây xanh tại Củ Chi.
                         </span>
                   </div>
                 </li>
@@ -503,10 +447,11 @@ $_SESSION['callFrom'] = "index.php";
                     <img src="dist/img/default-50x50.gif" alt="Product Image">
                   </div>
                   <div class="product-info">
-                    <a href="javascript:void(0)" class="product-title">Bicycle
-                      <span class="label label-info pull-right">1500 Likes</span></a>
+                    <a href="javascript:void(0)" class="product-title">#Đổi sách cũ lấy cây.
+                      <span class="label label-warning pull-right text-green">100 Green Point</span></a>
                     <span class="product-description">
-                          26" Mongoose Dolomite Men's 7-speed, Navy Blue.
+                          Buổi hội chợ môi trường đổi sách lấy cây xanh vừa </span> 
+                          <span class="product-description">  được team CYCLE tổ chức thành công.
                         </span>
                   </div>
                 </li>
@@ -516,10 +461,10 @@ $_SESSION['callFrom'] = "index.php";
                     <img src="dist/img/default-50x50.gif" alt="Product Image">
                   </div>
                   <div class="product-info">
-                    <a href="javascript:void(0)" class="product-title">Xbox One <span
-                        class="label label-danger pull-right">500 Likes</span></a>
+                    <a href="javascript:void(0)" class="product-title">#Giải cứu kênh rạch <span
+                        class="label label-danger pull-right text-green">500 Green Point</span></a>
                     <span class="product-description">
-                          Xbox One Console Bundle with Halo Master Chief Collection.
+                          Kênh nước đen đã được team ABC giải cứu!!!
                         </span>
                   </div>
                 </li>
@@ -529,10 +474,10 @@ $_SESSION['callFrom'] = "index.php";
                     <img src="dist/img/default-50x50.gif" alt="Product Image">
                   </div>
                   <div class="product-info">
-                    <a href="javascript:void(0)" class="product-title">PlayStation 4
-                      <span class="label label-success pull-right">24,000 Likes</span></a>
+                    <a href="javascript:void(0)" class="product-title">#Giải cứu động vật.
+                      <span class="label label-info pull-right">90 Point</span></a>
                     <span class="product-description">
-                          PlayStation 4 500GB Console (PS4)
+                          Team 4fun đã giải cứu thành công 2 cá thể khỉ quý hiếm bị bắt.
                         </span>
                   </div>
                 </li>
@@ -549,21 +494,15 @@ $_SESSION['callFrom'] = "index.php";
 
 
         </div>
-        <!-- /.col -->
-      </div>
-      <!-- /.row -->
-    </section>
-    <!-- /.content -->
-  </div>
   <!-- /.content-wrapper -->
 
-  <footer class="main-footer">
+  <!-- <footer class="main-footer">
     <div class="pull-right hidden-xs">
       <b>Version</b> 1.0.0
     </div>
     <strong>Copyright &copy; 2016-2017 <a href="index.php">AtHeart</a>.</strong> All rights
     reserved.
-  </footer>
+  </footer> -->
 
 </div>
 <!-- ./wrapper -->

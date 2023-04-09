@@ -48,7 +48,7 @@ $_SESSION['callFrom'] = "index.php";
   <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
   <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
   <![endif]-->
-
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <!-- Google Font -->
   <link rel="stylesheet"
         href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
@@ -288,7 +288,6 @@ $_SESSION['callFrom'] = "index.php";
           </div> -->
 
           <?php
-
                 $sql = "SELECT * FROM post INNER JOIN users ON post.id_user = users.id_user WHERE post.status='pending' ORDER BY post.id_post DESC";
                 $result = $conn->query($sql);
                 if($result->num_rows == 0){
@@ -329,15 +328,15 @@ $_SESSION['callFrom'] = "index.php";
                           </div>
                           <?php ?>
                           <p style="font-size: 18px;"><i class="fa-solid fa-location-dot" style="padding-right:2px"></i> <?php echo $row['location'];?></p>
-                          <p><?php echo $row['description']; ?></p>
+                          <p style="font-size: 20px;"><?php echo $row['description']; ?></p>
                           <?php $sql = "SELECT * FROM images WHERE images.id_post = '$row[id_post]'";
-                            $result = $conn->query($sql);
-                            if($result->num_rows > 0) {
+                            $result1 = $conn->query($sql);
+                            if($result1->num_rows > 0) {
                               echo('<div style="display:grid;grid-template-columns: 50% 50%;
                               grid-row: auto auto;
                               grid-column-gap: 1px;
                               grid-row-gap: 1px;">');
-                              while($img =  $result->fetch_assoc()){
+                              while($img =  $result1->fetch_assoc()){
                                 if ($img['image_content'] != ""){
                                   echo('<img class="img-responsive pad" src="uploads/' . $img['image_content']. '" alt="Photo" style="display:flex">');
                                 }

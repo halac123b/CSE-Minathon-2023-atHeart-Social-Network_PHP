@@ -33,6 +33,7 @@ $_SESSION['callFrom'] = "index.php";
   <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
   <!-- Font Awesome -->
   <link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <!-- Theme style -->
   <link rel="stylesheet" href="dist/css/AdminLTE.min.css">
   <!-- AdminLTE Skins. Choose a skin from the css/skins
@@ -331,72 +332,13 @@ $_SESSION['callFrom'] = "index.php";
 
         <div class="col-md-4">
           <!-- USERS LIST -->
-          <div class="box box-danger">
-            <div class="box-header with-border">
-              <h3 class="box-title">My Friends</h3>
-
-              <div class="box-tools pull-right">
-                <span class="label label-success">10 Online</span>
-              </div>
-            </div>
-            <!-- /.box-header -->
-            <div class="box-body no-padding">
-              <ul class="users-list clearfix">
-                <li>
-                  <img src="dist/img/user1-128x128.jpg" alt="User Image">
-                  <a class="users-list-name" href="#">Alexander Pierce</a>
-                  <span class="users-list-date">Today</span>
-                </li>
-                <li>
-                  <img src="dist/img/user8-128x128.jpg" alt="User Image">
-                  <a class="users-list-name" href="#">Norman</a>
-                  <span class="users-list-date">Yesterday</span>
-                </li>
-                <li>
-                  <img src="dist/img/user7-128x128.jpg" alt="User Image">
-                  <a class="users-list-name" href="#">Jane</a>
-                  <span class="users-list-date">12 Jan</span>
-                </li>
-                <li>
-                  <img src="dist/img/user6-128x128.jpg" alt="User Image">
-                  <a class="users-list-name" href="#">John</a>
-                  <span class="users-list-date">12 Jan</span>
-                </li>
-                <li>
-                  <img src="dist/img/user2-160x160.jpg" alt="User Image">
-                  <a class="users-list-name" href="#">Alexander</a>
-                  <span class="users-list-date">13 Jan</span>
-                </li>
-                <li>
-                  <img src="dist/img/user5-128x128.jpg" alt="User Image">
-                  <a class="users-list-name" href="#">Sarah</a>
-                  <span class="users-list-date">14 Jan</span>
-                </li>
-                <li>
-                  <img src="dist/img/user4-128x128.jpg" alt="User Image">
-                  <a class="users-list-name" href="#">Nora</a>
-                  <span class="users-list-date">15 Jan</span>
-                </li>
-                <li>
-                  <img src="dist/img/user3-128x128.jpg" alt="User Image">
-                  <a class="users-list-name" href="#">Nadia</a>
-                  <span class="users-list-date">15 Jan</span>
-                </li>
-              </ul>
-              <!-- /.users-list -->
-            </div>
-            <!-- /.box-body -->
-            <div class="box-footer text-center">
-              <a href="javascript:void(0)" class="uppercase">View All Users</a>
-            </div>
-            <!-- /.box-footer -->
-          </div>
+          
           <!--/.box -->
 
           <!-- PRODUCT LIST -->
           <div class="box box-primary">
             <div class="box-header with-border">
-              <h3 class="box-title">Suggested Pages</h3>
+              <h3 class="box-title">News</h3>
 
             </div>
             <!-- /.box-header -->
@@ -407,10 +349,10 @@ $_SESSION['callFrom'] = "index.php";
                     <img src="dist/img/default-50x50.gif" alt="Product Image">
                   </div>
                   <div class="product-info">
-                    <a href="javascript:void(0)" class="product-title">Samsung TV
-                      <span class="label label-warning pull-right">25,000 Likes</span></a>
+                    <a href="javascript:void(0)" class="product-title">#Trồng rừng
+                      <span class="label label-warning pull-right text-green">123 Green Point</span></a>
                     <span class="product-description">
-                          Samsung 32" 1080p 60Hz LED Smart HDTV.
+                          Team ABC đã trồng 123 cây xanh tại Củ Chi.
                         </span>
                   </div>
                 </li>
@@ -420,10 +362,11 @@ $_SESSION['callFrom'] = "index.php";
                     <img src="dist/img/default-50x50.gif" alt="Product Image">
                   </div>
                   <div class="product-info">
-                    <a href="javascript:void(0)" class="product-title">Bicycle
-                      <span class="label label-info pull-right">1500 Likes</span></a>
+                    <a href="javascript:void(0)" class="product-title">#Đổi sách cũ lấy cây.
+                      <span class="label label-warning pull-right text-green">100 Green Point</span></a>
                     <span class="product-description">
-                          26" Mongoose Dolomite Men's 7-speed, Navy Blue.
+                          Buổi hội chợ môi trường đổi sách lấy cây xanh vừa </span> 
+                          <span class="product-description">  được team CYCLE tổ chức thành công.
                         </span>
                   </div>
                 </li>
@@ -433,10 +376,10 @@ $_SESSION['callFrom'] = "index.php";
                     <img src="dist/img/default-50x50.gif" alt="Product Image">
                   </div>
                   <div class="product-info">
-                    <a href="javascript:void(0)" class="product-title">Xbox One <span
-                        class="label label-danger pull-right">500 Likes</span></a>
+                    <a href="javascript:void(0)" class="product-title">#Giải cứu kênh rạch <span
+                        class="label label-danger pull-right text-green">500 Green Point</span></a>
                     <span class="product-description">
-                          Xbox One Console Bundle with Halo Master Chief Collection.
+                          Kênh nước đen đã được team ABC giải cứu!!!
                         </span>
                   </div>
                 </li>
@@ -446,10 +389,10 @@ $_SESSION['callFrom'] = "index.php";
                     <img src="dist/img/default-50x50.gif" alt="Product Image">
                   </div>
                   <div class="product-info">
-                    <a href="javascript:void(0)" class="product-title">PlayStation 4
-                      <span class="label label-success pull-right">24,000 Likes</span></a>
+                    <a href="javascript:void(0)" class="product-title">#Giải cứu động vật.
+                      <span class="label label-info pull-right">90 Point</span></a>
                     <span class="product-description">
-                          PlayStation 4 500GB Console (PS4)
+                          Team 4fun đã giải cứu thành công 2 cá thể khỉ quý hiếm bị bắt.
                         </span>
                   </div>
                 </li>

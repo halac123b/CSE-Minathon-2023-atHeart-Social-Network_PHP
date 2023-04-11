@@ -485,12 +485,6 @@ $_SESSION['callFrom'] = "profile.php";
                           $result2 = $conn->query($sql2);
                           $totalLikes = (int)$result2->num_rows; 
                           ?>  
-                          <?php
-                          $sql3 = "SELECT * FROM comments WHERE id_post='$row[id_post]'";
-                          $result3 = $conn->query($sql3);
-                          $totalComments = (int)$result3->num_rows; 
-                          ?>                       
-                          <span class="pull-right text-muted"><?php echo $totalLikes; ?> likes - <?php echo $totalComments; ?> comments</span>
                         </div>
                         <!-- /.box-body -->
                         <div class="box-footer box-comments">
@@ -788,7 +782,7 @@ $_SESSION['callFrom'] = "profile.php";
     <div class="pull-right hidden-xs">
       <b>Version</b> 1.0.0
     </div>
-    <strong>Copyright &copy; 2016-2017 <a href="index.php">Social Network</a>.</strong> All rights
+    <strong><a href="index.php">Social Network</a>.</strong> All rights
     reserved.
   </footer>
 

@@ -343,7 +343,7 @@ $_SESSION['callFrom'] = "index.php";
                             <input type="text" name="green_point" id="green_point" class="border-2 border-black w-12" style="margin-right:3px; width:30px"><i class="fa-solid fa-shield-heart p-1" style="padding : 2px"></i><br>  
                         </div>
                        
-                        <label for="">Sub images:</label><br>
+                        <label for="">Proof images:</label><br>
                         <input type="file" name="files[]" class="border-2 border-black" require multiple><br>
                         <div class="pull-center margin-r-5" style="margin: 0px 100px;">
                           <button type="submit" name="submit_post1" class="btn btn-info">Post</button> 
@@ -394,7 +394,7 @@ $_SESSION['callFrom'] = "index.php";
                             <label for="">Green Point:</label><br>
                             <input type="text" name="green_point2" id="green_point2" class="border-2 border-black w-12"  style="width: 30px"><i class="fa-solid fa-shield-heart p-1" style="padding : 2px"></i><br>  
                         </div>                    
-                        <label for="">Sub images:</label><br>
+                        <label for="">Proof images:</label><br>
                         <input type="file" name="files[]" class="border-2 border-black" require multiple><br>
                         <div class="pull-left margin-r-5" style="margin: 0px 100px;">
                           <button type="submit" name="submit_post2" class="btn btn-info">Post</button>
@@ -504,7 +504,7 @@ $_SESSION['callFrom'] = "index.php";
                              echo '<img src="dist/img/avatar5.png" class="img-circle img-bordered-sm" alt="User Image">';
                           }
                         ?>
-                            <span class="username"><a href="#"><?php echo $row['name'] . "   " . "('$row[point]')"; ?></a></span>
+                            <span class="username"><a href="#"><?php echo $row['name'] . "   " . " - $row[point] "; ?><i class="fa-solid fa-shield-heart"></i></a></span>
                             <span class="description">Shared publicly - <?php echo date('d-M-Y h:i a', strtotime($row['createdAt'])); ?></span>
                           </div>
                         </div>
@@ -523,6 +523,8 @@ $_SESSION['callFrom'] = "index.php";
                           <?php ?>
                           <p style="font-size: 18px;"><i class="fa-solid fa-location-dot" style="padding-right:2px"></i> <?php echo $row['location'];?></p>
                           <p style="font-size: 20px;"><?php echo $row['description']; ?></p>
+                          <p style="font-size: 20px;"><strong>Number of volunteers: <?php echo $row['people']; ?></strong></p>
+                          <p style="font-size: 20px;"><strong>Green points you can get: <?php echo $row['green_point']; ?><i class="fa-solid fa-shield-heart"></i></strong></strong></p>
                           <?php $sql2 = "SELECT * FROM images WHERE images.id_post = '$row[id_post]'";
                             $result2 = $conn->query($sql2);
                             if($result2->num_rows > 0) {
@@ -713,7 +715,7 @@ $_SESSION['callFrom'] = "index.php";
     <div class="pull-right hidden-xs">
       <b>Version</b> 1.0.0
     </div>
-    <strong>Copyright &copy; 2016-2017 <a href="index.php">AtHeart</a>.</strong> All rights
+    <strong><a href="index.php">AtHeart</a>.</strong> All rights
     reserved.
   </footer>
 

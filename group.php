@@ -441,7 +441,7 @@ $_SESSION['callFrom'] = "group.php";
     <div class="pull-right hidden-xs">
       <b>Version</b> 1.0.0
     </div>
-    <strong>Copyright &copy; 2016-2017 <a href="#">Social Network</a>.</strong> All rights
+    <strong><a href="#">AtHeart</a>.</strong> All rights
     reserved.
   </footer>
 

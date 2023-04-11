@@ -332,7 +332,7 @@ $_SESSION['callFrom'] = "index.php";
           ?>
 
           <?php
-                $sql = "SELECT * FROM fund INNER JOIN users WHERE fund.id_user=users.id_user AND fund.id_user='$_SESSION[id_user]' AND fund.status='air' ORDER BY fund.id_post DESC";
+                $sql = "SELECT * FROM fund INNER JOIN users WHERE fund.id_user=users.id_user AND fund.status='air' ORDER BY fund.id_post DESC";
                 $result = $conn->query($sql);
                 if($result->num_rows > 0) {
                   $i = 0;
@@ -603,7 +603,7 @@ $_SESSION['callFrom'] = "index.php";
     <div class="pull-right hidden-xs">
       <b>Version</b> 1.0.0
     </div>
-    <strong>Copyright &copy; 2016-2017 <a href="index.php">AtHeart</a>.</strong> All rights
+    <strong><a href="index.php">AtHeart</a>.</strong> All rights
     reserved.
   </footer>
 

@@ -59,11 +59,11 @@ $_SESSION['callFrom'] = "index.php";
   <header class="main-header">
 
     <!-- Logo -->
-    <a href="index2.html" class="logo">
+    <a href="index.php" class="logo">
       <!-- mini logo for sidebar mini 50x50 pixels -->
       <span class="logo-mini"><b>S</b>N</span>
       <!-- logo for regular state and mobile devices -->
-      <span class="logo-lg"><b>Social </b>Network</span>
+      <span class="logo-lg"><b>At </b>Heart</span>
     </a>
 
     <!-- Header Navbar: style can be found in header.less -->
@@ -329,6 +329,8 @@ $_SESSION['callFrom'] = "index.php";
                           <?php ?>
                           <p style="font-size: 18px;"><i class="fa-solid fa-location-dot" style="padding-right:2px"></i> <?php echo $row['location'];?></p>
                           <p style="font-size: 20px;"><?php echo $row['description']; ?></p>
+                          <p style="font-size: 20px;"><strong>Number of volunteers: <?php echo $row['people']; ?></strong></p>
+                          <p style="font-size: 20px;"><strong>Green points you can get: <?php echo $row['green_point']; ?><i class="fa-solid fa-shield-heart"></i></strong></strong></p>
                           <?php $sql = "SELECT * FROM images WHERE images.id_post = '$row[id_post]'";
                             $result1 = $conn->query($sql);
                             if($result1->num_rows > 0) {
@@ -522,7 +524,7 @@ $_SESSION['callFrom'] = "index.php";
     <div class="pull-right hidden-xs">
       <b>Version</b> 1.0.0
     </div>
-    <strong>Copyright &copy; 2016-2017 <a href="index.php">AtHeart</a>.</strong> All rights
+    <strong><a href="index.php">AtHeart</a>.</strong> All rights
     reserved.
   </footer>
 

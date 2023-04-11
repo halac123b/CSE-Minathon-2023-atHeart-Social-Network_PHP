@@ -308,7 +308,7 @@ $_SESSION['callFrom'] = "index.php";
                              echo '<img src="dist/img/avatar5.png" class="img-circle img-bordered-sm" alt="User Image">';
                           }
                         ?>
-                            <span class="username"><a href="#"><?php echo $row['name'] . "   " . "($row[point])"; ?></a></span>
+                            <span class="username"><a href="#"><?php echo $row['name'] . "   " . " - $row[point] "; ?><i class="fa-solid fa-shield-heart"></i></a></span>
                             <span class="description">Shared publicly - <?php echo date('d-M-Y h:i a', strtotime($row['createdAt'])); ?></span>
                           </div>
                         </div>
@@ -336,7 +336,7 @@ $_SESSION['callFrom'] = "index.php";
                           <form class="form-horizontal" action="" method="post" enctype="multipart/form-data">
                             <input type="text" id="addcomment" class="form-control input-sm" placeholder="Enter your work after crowfunding" name="report">
                             <input type="text" name="id" value="<?php echo($row['id_post']); ?>" hidden>
-                            <label for="">Sub images:</label><br>
+                            <label for="">Proof images:</label><br>
                               <input type="file" name="files[]" class="border-2 border-black" require multiple><br>
                               <div class="pull-right margin-r-5">
                               <button type="submit" name="submit_post1" class="btn btn-info">Post</button>
@@ -536,7 +536,7 @@ $_SESSION['callFrom'] = "index.php";
     <div class="pull-right hidden-xs">
       <b>Version</b> 1.0.0
     </div>
-    <strong>Copyright &copy; 2016-2017 <a href="index.php">Social Network</a>.</strong> All rights
+    <strong><a href="index.php">Social Network</a>.</strong> All rights
     reserved.
   </footer>
 

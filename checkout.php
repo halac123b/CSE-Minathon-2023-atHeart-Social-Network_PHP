@@ -289,7 +289,7 @@ $_SESSION['callFrom'] = "index.php";
           </div> -->
 
           <?php
-                $sql = "SELECT * FROM post INNER JOIN users ON post.id_user = users.id_user WHERE post.status='air' AND post.id_user='$_SESSION[id_user]' ORDER BY post.id_post ASC";
+                $sql = "SELECT * FROM post INNER JOIN users ON post.id_user = users.id_user WHERE post.status='air' AND post.id_user='$_SESSION[id_user]' ORDER BY post.id_post DESC";
                 $result = $conn->query($sql);
 
                 if($result->num_rows > 0) {
